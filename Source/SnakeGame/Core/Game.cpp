@@ -1,4 +1,5 @@
 #include "Core/Game.h"
+#include "Core/Grid.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGrid, All, All);
 
