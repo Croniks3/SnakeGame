@@ -25,7 +25,7 @@ void Grid::initWalls()
 		for (int32 x = 0; x < width; x++)
 		{
 			CellType cellType = IsFirstOrLastString || x == 0 || x == width - 1 ? CellType::Wall : CellType::Empty;
-			m_cells[y * width + x] = cellType;
+			m_cells[posToIndex(x, y)] = cellType;
 		}
 	}
 }
@@ -42,7 +42,7 @@ void Grid::printDebug()
 		for (int32 x = 0; x < width; x++)
 		{
 			TCHAR symbol;
-			switch (m_cells[y * width + x])
+			switch (m_cells[posToIndex(x, y)])
 			{
 				case CellType::Empty: 
 					symbol = '0'; 
@@ -56,4 +56,9 @@ void Grid::printDebug()
 		}
 	}
 #endif
+}
+
+int32 Grid::posToIndex(int32 x, int32 y) const
+{
+	return y * c_dimensions.width + x;
 }
