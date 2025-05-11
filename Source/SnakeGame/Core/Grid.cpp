@@ -52,8 +52,8 @@ void Grid::printDebug()
 					break;
 			}
 			line.AppendChar(symbol).AppendChar(' ');
-			UE_LOG(LogGrid, Display, TEXT("%s"), *line);
 		}
+		UE_LOG(LogGrid, Display, TEXT("%s"), *line);
 	}
 #endif
 }
