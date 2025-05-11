@@ -15,7 +15,7 @@ public:
 	virtual void StartPlay() override;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "5", ClampMax = "100"))
 	FInt32Point GridSize{10, 10};
 
 private:
