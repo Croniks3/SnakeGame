@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "SG_Types.h";
 
+
 namespace Snake
 {
 	class Grid

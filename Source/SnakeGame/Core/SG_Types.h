@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 
+
 namespace Snake
 {
 	struct Dimensions
