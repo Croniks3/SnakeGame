@@ -1,15 +1,22 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SG_Types.h";
 
-/**
- * 
- */
-class SNAKEGAME_API Grid
+namespace Snake
 {
-public:
-	Grid();
-	~Grid();
-};
+	class Grid
+	{
+	public:
+		Grid(const Dimensions& gridSize);
+
+		Dimensions dimensions() const { return c_dimensions; }
+
+	private:
+		const Dimensions c_dimensions;
+		TArray<CellType> m_cells;
+
+		void initWalls();
+		void printDebug();
+	};
+}
