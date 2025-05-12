@@ -10,7 +10,8 @@ void ASG_GameMode::StartPlay()
 	Super::StartPlay();
 
 	// Init core game
-	Snake::Settings settings{GridSize.X, GridSize.Y};
+	FInt32Point calculatedGridSize = CalculateGridSize(GridSize.X, GridSize.Y);
+	Snake::Settings settings{ calculatedGridSize.X, calculatedGridSize.Y };
 	Game = MakeUnique<Snake::Game>(settings);
 	check(Game.IsValid());
 
@@ -33,3 +34,14 @@ void ASG_GameMode::StartPlay()
 	
 	pawn->UpdateLocation(Game->getGrid()->dimensions(), CellSize, gridOrigin);
 }
+
+#pragma optimize("", off)
+FInt32Point ASG_GameMode::CalculateGridSize(int32 x, int32 y)
+{
+	FVector2D viewportSize = GEngine->GameViewport->Viewport->GetSizeXY();
+	
+	float factor = (viewportSize.X / viewportSize.Y) + 0.1f;
+	y = (int32)(((x + 2.0f) / factor) - 3.0f);
+	return FInt32Point(x, y);
+}
+#pragma optimize("", off)

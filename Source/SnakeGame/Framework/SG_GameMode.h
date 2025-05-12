@@ -30,4 +30,6 @@ private:
 
 	UPROPERTY()
 	ASG_Grid* GridVisual;
+
+	FInt32Point CalculateGridSize(int32 x, int32 y);
 };

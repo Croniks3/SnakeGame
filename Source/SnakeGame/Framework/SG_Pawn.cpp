@@ -15,13 +15,16 @@ ASG_Pawn::ASG_Pawn()
 	Camera->SetupAttachment(Origin);
 }
 
+//#pragma optimize("", off)
 void ASG_Pawn::UpdateLocation(const Snake::Dimensions& gridDimensions, int32 cellSize, const FTransform& gridOrigin)
 {
 	const float worldWidth = gridDimensions.width * cellSize;
 	const float worldHeight = gridDimensions.height * cellSize;
 	
 	const float halfAngleRad = FMath::DegreesToRadians(Camera->FieldOfView * 0.5f);
-	const float z = worldWidth * 0.5f / FMath::Tan(halfAngleRad);
+	float z = (worldWidth * 0.5f) / FMath::Tan(halfAngleRad);
+	z *= 1.04f;
 	const FVector newPawnLocation = gridOrigin.GetLocation() + FVector(0.5f * worldHeight, 0.5f * worldWidth, z);
 	SetActorLocation(newPawnLocation);
 }
+//#pragma optimize("", off)
