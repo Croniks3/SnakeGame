@@ -15,6 +15,8 @@ class SNAKEGAME_API ASG_GameMode : public AGameModeBase
 public:
 	virtual void StartPlay() override;
 
+	void Construct(FViewport* viewport, uint32 i);
+
 protected:
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
 	FInt32Point GridSize{10, 10};
