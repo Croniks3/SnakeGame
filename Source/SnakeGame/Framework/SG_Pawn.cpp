@@ -1,34 +1,27 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Framework/SG_Pawn.h"
+#include "Camera/CameraComponent.h"
 
-// Sets default values
+
 ASG_Pawn::ASG_Pawn()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	Origin = CreateDefaultSubobject<USceneComponent>("Origin");
+	check(Origin);
+	SetRootComponent(Origin);
+
+	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
+	check(Camera);
+	Camera->SetupAttachment(Origin);
 }
 
-// Called when the game starts or when spawned
-void ASG_Pawn::BeginPlay()
+void ASG_Pawn::UpdateLocation(const Snake::Dimensions& gridDimensions, int32 cellSize, const FTransform& gridOrigin)
 {
-	Super::BeginPlay();
+	const float worldWidth = gridDimensions.width * cellSize;
+	const float worldHeight = gridDimensions.height * cellSize;
 	
+	const float halfAngleRad = FMath::DegreesToRadians(Camera->FieldOfView * 0.5f);
+	const float z = worldWidth * 0.5f / FMath::Tan(halfAngleRad);
+	const FVector newPawnLocation = gridOrigin.GetLocation() + FVector(0.5f * worldHeight, 0.5f * worldWidth, z);
+	SetActorLocation(newPawnLocation);
 }
-
-// Called every frame
-void ASG_Pawn::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
-// Called to bind functionality to input
-void ASG_Pawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
