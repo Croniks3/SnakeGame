@@ -30,6 +30,6 @@ void ASG_GameMode::StartPlay()
 	auto* pawn = Cast<ASG_Pawn>(pc->GetPawn());
 	check(pawn);
 	check(Game->getGrid());
-
+	
 	pawn->UpdateLocation(Game->getGrid()->dimensions(), CellSize, gridOrigin);
 }

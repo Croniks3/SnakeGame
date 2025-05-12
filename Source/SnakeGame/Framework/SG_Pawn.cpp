@@ -9,7 +9,7 @@ ASG_Pawn::ASG_Pawn()
 	Origin = CreateDefaultSubobject<USceneComponent>("Origin");
 	check(Origin);
 	SetRootComponent(Origin);
-
+	
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	check(Camera);
 	Camera->SetupAttachment(Origin);
