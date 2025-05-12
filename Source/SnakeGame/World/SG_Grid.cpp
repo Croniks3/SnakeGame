@@ -43,12 +43,12 @@ void ASG_Grid::DrawGrid()
 		(
 			GetWorld(),
 			startLocation,
-			startLocation + GetActorRightVector() * CellSize * WorldWidth,
+			startLocation + GetActorRightVector() * WorldWidth,
 			FColor::Green,
 			false,
-			-1.0f,
-			0U,
-			1.0f
+			-1.0,
+			0,
+			1.0
 		);
 	}
 	
@@ -59,12 +59,12 @@ void ASG_Grid::DrawGrid()
 		(
 			GetWorld(),
 			startLocation,
-			startLocation + GetActorForwardVector() * CellSize * WorldHeight,
+			startLocation + GetActorForwardVector() * WorldHeight,
 			FColor::Red,
 			false,
-			-1.0f,
-			0U,
-			1.0f
+			-1.0,
+			0,
+			1.0
 		);
 	}
 }

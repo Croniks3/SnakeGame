@@ -12,6 +12,7 @@ namespace Snake
 	{
 	public:
 		Game(const Settings& settings);
+		TSharedPtr<Grid> getGrid() const { return m_grid; };
 
 	private:
 		const Settings c_settings;
