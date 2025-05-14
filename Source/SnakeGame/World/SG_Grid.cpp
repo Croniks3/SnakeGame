@@ -46,9 +46,9 @@ void ASG_Grid::DrawGrid()
 			startLocation + GetActorRightVector() * WorldWidth,
 			FColor::Green,
 			false,
-			-1.0,
+			-1.0f,
 			0,
-			1.0
+			2.0f
 		);
 	}
 	
@@ -62,9 +62,9 @@ void ASG_Grid::DrawGrid()
 			startLocation + GetActorForwardVector() * WorldHeight,
 			FColor::Red,
 			false,
-			-1.0,
+			-1.0f,
 			0,
-			1.0
+			2.0f
 		);
 	}
 }

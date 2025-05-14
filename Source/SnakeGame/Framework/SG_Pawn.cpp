@@ -1,6 +1,18 @@
 #include "Framework/SG_Pawn.h"
 #include "Camera/CameraComponent.h"
 
+namespace
+{
+	float GetHalfFOVTan(float fovDegrees)
+	{
+		return FMath::Tan(FMath::DegreesToRadians(fovDegrees * 0.5f));
+	}
+
+	float GetVerticalFOV(float horFovDegrees, float viewportAspect)
+	{
+		return FMath::RadiansToDegrees(2.0f * FMath::Atan(FMath::Tan(FMath::DegreesToRadians(horFovDegrees) * 0.5f) * viewportAspect));
+	}
+}
 
 ASG_Pawn::ASG_Pawn()
 {
@@ -17,12 +29,49 @@ ASG_Pawn::ASG_Pawn()
 
 void ASG_Pawn::UpdateLocation(const Snake::Dimensions& gridDimensions, int32 cellSize, const FTransform& gridOrigin)
 {
-	const float worldWidth = gridDimensions.width * cellSize;
-	const float worldHeight = gridDimensions.height * cellSize;
-	
-	const float halfAngleRad = FMath::DegreesToRadians(Camera->FieldOfView * 0.5f);
-	float z = (worldWidth * 0.5f) / FMath::Tan(halfAngleRad);
+	GridDimensions = gridDimensions;
+	CellSize = cellSize;
+	GridOrigin = gridOrigin;
+
+	check(GEngine);
+	check(GEngine->GameViewport);
+	check(GEngine->GameViewport->Viewport);
+
+	auto* viewPort = GEngine->GameViewport->Viewport;
+	viewPort->ViewportResizedEvent.AddUObject(this, &ThisClass::OnViewportResized);
+
+#if WITH_EDITOR
+	OnViewportResized(viewPort, 0);
+#endif
+}
+
+void ASG_Pawn::OnViewportResized(FViewport* viewPort, uint32 i)
+{
+	if (viewPort == nullptr || viewPort->GetSizeXY().Y == 0 || GridDimensions.height == 0)
+	{
+		return;
+	}
+
+	const float worldWidth = GridDimensions.width * CellSize;
+	const float worldHeight = GridDimensions.height * CellSize;
+
+	float z = 0.0f;
+
+	const float viewportAspect = static_cast<float>(viewPort->GetSizeXY().X) / viewPort->GetSizeXY().Y;
+	const float gridAspect = static_cast<float>(GridDimensions.width) / GridDimensions.height;
+
+	if (viewportAspect <= gridAspect)
+	{
+		z = worldWidth / GetHalfFOVTan(Camera->FieldOfView);
+	}
+	else
+	{
+		check(viewportAspect);
+		const float verticalFOV = GetVerticalFOV(Camera->FieldOfView, 1.0f / viewportAspect);
+		z = worldHeight / GetHalfFOVTan(verticalFOV);
+	}
 	z *= 1.04f;
-	const FVector newPawnLocation = gridOrigin.GetLocation() + FVector(0.5f * worldHeight, 0.5f * worldWidth, z);
+
+	const FVector newPawnLocation = GridOrigin.GetLocation() + 0.5f * FVector(worldHeight, worldWidth, z);
 	SetActorLocation(newPawnLocation);
 }
