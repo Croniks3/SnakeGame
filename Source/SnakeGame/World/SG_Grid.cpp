@@ -37,7 +37,7 @@ void ASG_Grid::Tick(float DeltaTime)
 
 void ASG_Grid::DrawGrid()
 {
-	if (GetWorld() == nullptr || GetWorld()->LineBatcher.Get() == nullptr)
+	if (GetWorld() == nullptr || GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World) == nullptr)
 	{
 		return;
 	}
@@ -56,7 +56,7 @@ void ASG_Grid::DrawGrid()
 			0,
 			2.0f
 		);*/
-		GetWorld()->LineBatcher->DrawLine
+		GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine
 		(
 			startLocation,
 			startLocation + GetActorRightVector() * WorldWidth,
@@ -81,7 +81,7 @@ void ASG_Grid::DrawGrid()
 			0,
 			2.0f
 		);*/
-		GetWorld()->LineBatcher->DrawLine
+		GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine
 		(
 			startLocation,
 			startLocation + GetActorForwardVector() * WorldHeight,
