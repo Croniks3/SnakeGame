@@ -16,13 +16,13 @@ Grid::Grid(const Dimensions& gridSize) //
 
 void Grid::initWalls()
 {
-	int32 height = c_dimensions.height;
-	int32 width = c_dimensions.width;
+	uint32 height = c_dimensions.height;
+	uint32 width = c_dimensions.width;
 
-	for (int32 y = 0; y < height; y++)
+	for (uint32 y = 0; y < height; y++)
 	{
 		bool IsFirstOrLastString = y == 0 || y == height - 1;
-		for (int32 x = 0; x < width; x++)
+		for (uint32 x = 0; x < width; x++)
 		{
 			CellType cellType = IsFirstOrLastString || x == 0 || x == width - 1 ? CellType::Wall : CellType::Empty;
 			m_cells[posToIndex(x, y)] = cellType;
@@ -33,13 +33,13 @@ void Grid::initWalls()
 void Grid::printDebug()
 {
 #if !UE_BUILD_SHIPPING
-	int32 height = c_dimensions.height;
-	int32 width = c_dimensions.width;
+	uint32 height = c_dimensions.height;
+	uint32 width = c_dimensions.width;
 
-	for (int32 y = 0; y < height; y++)
+	for (uint32 y = 0; y < height; y++)
 	{
 		FString line;
-		for (int32 x = 0; x < width; x++)
+		for (uint32 x = 0; x < width; x++)
 		{
 			TCHAR symbol;
 			switch (m_cells[posToIndex(x, y)])
@@ -58,7 +58,7 @@ void Grid::printDebug()
 #endif
 }
 
-int32 Grid::posToIndex(int32 x, int32 y) const
+uint32 Grid::posToIndex(uint32 x, uint32 y) const
 {
 	return y * c_dimensions.width + x;
 }

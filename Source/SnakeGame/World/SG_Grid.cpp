@@ -16,7 +16,7 @@ void ASG_Grid::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ASG_Grid::SetModel(const TSharedPtr<Snake::Grid>& grid, int32 cellSize)
+void ASG_Grid::SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize)
 {
 	if (grid.IsValid() == false)
 	{
@@ -42,7 +42,7 @@ void ASG_Grid::DrawGrid()
 		return;
 	}
 
-	for (int32 i = 0; i < GridDimensions.height + 1; ++i)
+	for (uint32 i = 0; i < GridDimensions.height + 1; ++i)
 	{
 		const FVector startLocation = GetActorLocation() + GetActorForwardVector() * CellSize * i;
 		GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine
@@ -56,7 +56,7 @@ void ASG_Grid::DrawGrid()
 		);
 	}
 	
-	for (int32 i = 0; i < GridDimensions.width + 1; ++i)
+	for (uint32 i = 0; i < GridDimensions.width + 1; ++i)
 	{
 		const FVector startLocation = GetActorLocation() + GetActorRightVector() * CellSize * i;
 		GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine

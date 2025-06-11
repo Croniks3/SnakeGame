@@ -17,10 +17,10 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
-	FInt32Point GridSize{10, 10};
+	FUint32Point GridSize{10, 10};
 
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
-	int32 CellSize{ 10 };
+	uint32 CellSize{ 10 };
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASG_Grid> GridVisualClass;

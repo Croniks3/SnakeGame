@@ -14,7 +14,7 @@ class SNAKEGAME_API ASG_Pawn : public APawn
 
 public:
 	ASG_Pawn();
-	void UpdateLocation(const Snake::Dimensions& gridDimensions, int32 cellSize, const FTransform& gridOrigin);
+	void UpdateLocation(const Snake::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin);
 	
 protected:
 	UPROPERTY(VisibleAnywhere)
@@ -25,7 +25,7 @@ protected:
 
 private:
 	Snake::Dimensions GridDimensions;
-	int32 CellSize; 
+	uint32 CellSize;
 	FTransform GridOrigin;
 	void OnViewportResized(FViewport* viewPort, uint32 i);
 };

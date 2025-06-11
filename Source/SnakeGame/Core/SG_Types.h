@@ -1,14 +1,11 @@
 #pragma once
 
-#include "CoreMinimal.h"
-
-
 namespace Snake
 {
 	struct Dimensions
 	{
-		int32 width;
-		int32 height;
+		uint32 width;
+		uint32 height;
 	};
 
 	enum CellType

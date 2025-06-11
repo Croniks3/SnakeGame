@@ -1,7 +1,7 @@
 #pragma once
 
-#include "CoreMinimal.h"
 #include "SG_Types.h"
+#include <Templates/SharedPointer.h>
 
 
 namespace Snake

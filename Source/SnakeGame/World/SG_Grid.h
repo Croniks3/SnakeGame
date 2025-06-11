@@ -25,13 +25,13 @@ protected:
 public:
 	virtual void Tick(float DeltaTime) override;
 
-	void SetModel(const TSharedPtr<Snake::Grid>& grid, int32 cellSize);
+	void SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize);
 
 private:
 	Snake::Dimensions GridDimensions;
-	int32 CellSize;
-	int32 WorldWidth;
-	int32 WorldHeight;
+	uint32 CellSize;
+	uint32 WorldWidth;
+	uint32 WorldHeight;
 
 	void DrawGrid();
 };
