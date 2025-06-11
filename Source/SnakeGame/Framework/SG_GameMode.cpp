@@ -2,7 +2,7 @@
 #include "Core/SG_Types.h"
 #include "World/SG_Grid.h"
 #include "Core/Grid.h"
-#include "Framework/SG_Pawn.h"
+#include "Framework/SG_GridPawn.h"
 
 
 //#pragma optimize("", off)
@@ -25,13 +25,13 @@ void ASG_GameMode::StartPlay()
 	GridVisual->SetModel(Game->getGrid(), CellSize);
 	GridVisual->FinishSpawning(gridOrigin);
 
-	// Set pawn location fitting grid in viewport
+	// Set gridPawn location fitting grid in viewport
 	auto* pc = GetWorld()->GetFirstPlayerController();
 	check(pc);
 
-	auto* pawn = Cast<ASG_Pawn>(pc->GetPawn());
-	check(pawn);
+	auto* gridPawn = Cast<ASG_GridPawn>(pc->GetPawn());
+	check(gridPawn);
 	check(Game->getGrid());
 
-	pawn->UpdateLocation(Game->getGrid()->dimensions(), CellSize, gridOrigin);
+	gridPawn->UpdateLocation(Game->getGrid()->dimensions(), CellSize, gridOrigin);
 }

@@ -3,17 +3,17 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "Core/SG_Types.h"
-#include "SG_Pawn.generated.h"
+#include "SG_GridPawn.generated.h"
 
 class UCameraComponent;
 
 UCLASS()
-class SNAKEGAME_API ASG_Pawn : public APawn
+class SNAKEGAME_API ASG_GridPawn : public APawn
 {
 	GENERATED_BODY()
 
 public:
-	ASG_Pawn();
+	ASG_GridPawn();
 	void UpdateLocation(const Snake::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin);
 	
 protected:

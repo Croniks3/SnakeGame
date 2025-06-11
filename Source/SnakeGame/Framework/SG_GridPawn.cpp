@@ -1,4 +1,4 @@
-#include "Framework/SG_Pawn.h"
+#include "Framework/SG_GridPawn.h"
 #include "Camera/CameraComponent.h"
 
 namespace
@@ -14,7 +14,7 @@ namespace
 	}
 }
 
-ASG_Pawn::ASG_Pawn()
+ASG_GridPawn::ASG_GridPawn()
 {
 	PrimaryActorTick.bCanEverTick = false;
 
@@ -27,7 +27,7 @@ ASG_Pawn::ASG_Pawn()
 	Camera->SetupAttachment(Origin);
 }
 
-void ASG_Pawn::UpdateLocation(const Snake::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin)
+void ASG_GridPawn::UpdateLocation(const Snake::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin)
 {
 	GridDimensions = gridDimensions;
 	CellSize = cellSize;
@@ -45,7 +45,7 @@ void ASG_Pawn::UpdateLocation(const Snake::Dimensions& gridDimensions, uint32 ce
 #endif
 }
 
-void ASG_Pawn::OnViewportResized(FViewport* viewPort, uint32 i)
+void ASG_GridPawn::OnViewportResized(FViewport* viewPort, uint32 i)
 {
 	if (viewPort == nullptr || viewPort->GetSizeXY().Y == 0 || GridDimensions.height == 0)
 	{
