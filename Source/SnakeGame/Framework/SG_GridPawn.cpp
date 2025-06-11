@@ -3,14 +3,14 @@
 
 namespace
 {
-	float GetHalfFOVTan(float fovDegrees)
+	double GetHalfFOVTan(double fovDegrees)
 	{
-		return FMath::Tan(FMath::DegreesToRadians(fovDegrees * 0.5f));
+		return FMath::Tan(FMath::DegreesToRadians(fovDegrees * 0.5));
 	}
 
-	float GetVerticalFOV(float horFovDegrees, float viewportAspect)
+	double GetVerticalFOV(double horFovDegrees, double viewportAspect)
 	{
-		return FMath::RadiansToDegrees(2.0f * FMath::Atan(FMath::Tan(FMath::DegreesToRadians(horFovDegrees) * 0.5f) * viewportAspect));
+		return FMath::RadiansToDegrees(2.0 * FMath::Atan(FMath::Tan(FMath::DegreesToRadians(horFovDegrees) * 0.5) * viewportAspect));
 	}
 }
 
@@ -52,13 +52,13 @@ void ASG_GridPawn::OnViewportResized(FViewport* viewPort, uint32 i)
 		return;
 	}
 
-	const float worldWidth = GridDimensions.width * CellSize;
-	const float worldHeight = GridDimensions.height * CellSize;
+	const double worldWidth = GridDimensions.width * CellSize;
+	const double worldHeight = GridDimensions.height * CellSize;
 
-	float z = 0.0f;
+	double z = 0.0;
 
-	const float viewportAspect = static_cast<float>(viewPort->GetSizeXY().X) / viewPort->GetSizeXY().Y;
-	const float gridAspect = static_cast<float>(GridDimensions.width) / GridDimensions.height;
+	const double viewportAspect = static_cast<double>(viewPort->GetSizeXY().X) / viewPort->GetSizeXY().Y;
+	const double gridAspect = static_cast<double>(GridDimensions.width) / GridDimensions.height;
 
 	if (viewportAspect <= gridAspect)
 	{
@@ -67,11 +67,11 @@ void ASG_GridPawn::OnViewportResized(FViewport* viewPort, uint32 i)
 	else
 	{
 		check(viewportAspect);
-		const float verticalFOV = GetVerticalFOV(Camera->FieldOfView, 1.0f / viewportAspect);
+		const double verticalFOV = GetVerticalFOV(Camera->FieldOfView, 1.0 / viewportAspect);
 		z = worldHeight / GetHalfFOVTan(verticalFOV);
 	}
 	z *= 1.04f;
 
-	const FVector newPawnLocation = GridOrigin.GetLocation() + 0.5f * FVector(worldHeight, worldWidth, z);
+	const FVector newPawnLocation = GridOrigin.GetLocation() + 0.5 * FVector(worldHeight, worldWidth, z);
 	SetActorLocation(newPawnLocation);
 }
