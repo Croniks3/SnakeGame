@@ -1,14 +1,22 @@
 #include "World/SG_Grid.h"
 #include "Core/Grid.h"
-#include "DrawDebugHelpers.h"
 #include "Components/LineBatchComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogWorldGrid, All, All);
-
+#define GET_VAR_NAME(var) #var
 
 ASG_Grid::ASG_Grid()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	Origin = CreateDefaultSubobject<USceneComponent>(GET_VAR_NAME(Origin));
+	check(Origin);
+	SetRootComponent(Origin);
+
+	GridMesh = CreateDefaultSubobject<UStaticMeshComponent>(GET_VAR_NAME(GridMesh));
+	check(GridMesh);
+	GridMesh->SetupAttachment(Origin);
 }
 
 void ASG_Grid::BeginPlay()
@@ -27,6 +35,11 @@ void ASG_Grid::SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize)
 	CellSize = cellSize;
 	WorldWidth = CellSize * GridDimensions.width;
 	WorldHeight = CellSize * GridDimensions.height;
+
+	check(GridMesh->GetStaticMesh());
+	const FBox Box = GridMesh->GetStaticMesh()->GetBoundingBox();
+
+
 }
 
 void ASG_Grid::Tick(float DeltaTime)

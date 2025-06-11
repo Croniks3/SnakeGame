@@ -11,6 +11,8 @@ namespace Snake
 	class Grid;
 }
 
+class UStaticMeshComponent;
+
 UCLASS()
 class SNAKEGAME_API ASG_Grid : public AActor
 {
@@ -20,6 +22,12 @@ public:
 	ASG_Grid();
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* Origin;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* GridMesh;
+
 	virtual void BeginPlay() override;
 
 public:
