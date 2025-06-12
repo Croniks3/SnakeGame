@@ -23,6 +23,7 @@ void ASG_GameMode::StartPlay()
 	check(GridVisual);
 
 	GridVisual->SetModel(Game->getGrid(), CellSize);
+
 	GridVisual->FinishSpawning(gridOrigin);
 
 	// Set gridPawn location fitting grid in viewport

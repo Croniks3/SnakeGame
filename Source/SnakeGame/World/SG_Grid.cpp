@@ -36,19 +36,27 @@ void ASG_Grid::SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize)
 	WorldWidth = CellSize * GridDimensions.width;
 	WorldHeight = CellSize * GridDimensions.height;
 
-	check(GridMesh->GetStaticMesh());
-	const FBox Box = GridMesh->GetStaticMesh()->GetBoundingBox();
+	// Scale and positioning mesh
+	auto staticMesh = GridMesh->GetStaticMesh();
+	check(staticMesh);
+	const FBox Box = staticMesh->GetBoundingBox();
 	const auto BoxSize = Box.GetSize();
 
 	check(BoxSize.X); check(BoxSize.Y);
 	GridMesh->SetRelativeScale3D(FVector(WorldHeight / BoxSize.X, WorldWidth / BoxSize.Y, 1.0));
 	GridMesh->SetRelativeLocation(0.5 * FVector(WorldHeight, WorldWidth, -BoxSize.Z));
+
+	// Setup mesh material
+	GridMaterial = GridMesh->CreateAndSetMaterialInstanceDynamic(0);
+	if (GridMaterial != nullptr)
+	{
+		GridMaterial->SetVectorParameterValue("Division", FVector4d(GridDimensions.height, GridDimensions.width, 0, 0));
+	}
 }
 
 void ASG_Grid::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	DrawGrid();
 }
 
 void ASG_Grid::DrawGrid()

@@ -20,6 +20,8 @@ class SNAKEGAME_API ASG_Grid : public AActor
 
 public:
 	ASG_Grid();
+	virtual void Tick(float DeltaTime) override;
+	void SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize);
 
 protected:
 	UPROPERTY(VisibleAnywhere)
@@ -30,12 +32,10 @@ protected:
 
 	virtual void BeginPlay() override;
 
-public:
-	virtual void Tick(float DeltaTime) override;
-
-	void SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize);
-
 private:
+	UPROPERTY()
+	UMaterialInstanceDynamic* GridMaterial;
+
 	Snake::Dimensions GridDimensions;
 	uint32 CellSize;
 	uint32 WorldWidth;
