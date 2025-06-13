@@ -8,7 +8,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogWorldGrid, All, All);
 
 ASG_Grid::ASG_Grid()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	Origin = CreateDefaultSubobject<USceneComponent>(GET_VAR_NAME(Origin));
 	check(Origin);
@@ -54,43 +54,9 @@ void ASG_Grid::SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize)
 	}
 }
 
-void ASG_Grid::Tick(float DeltaTime)
+void ASG_Grid::SetColors(FLinearColor& GridBackgroundColor, FLinearColor& GridWallColor, FLinearColor& GridLineColor)
 {
-	Super::Tick(DeltaTime);
-}
-
-void ASG_Grid::DrawGrid()
-{
-	if (GetWorld() == nullptr || GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World) == nullptr)
-	{
-		return;
-	}
-
-	for (uint32 i = 0; i < GridDimensions.height + 1; ++i)
-	{
-		const FVector startLocation = GetActorLocation() + GetActorForwardVector() * CellSize * i;
-		GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine
-		(
-			startLocation,
-			startLocation + GetActorRightVector() * WorldWidth,
-			FLinearColor::Green,
-			1,
-			2.0f,
-			0
-		);
-	}
-	
-	for (uint32 i = 0; i < GridDimensions.width + 1; ++i)
-	{
-		const FVector startLocation = GetActorLocation() + GetActorRightVector() * CellSize * i;
-		GetWorld()->GetLineBatcher(UWorld::ELineBatcherType::World)->DrawLine
-		(
-			startLocation,
-			startLocation + GetActorForwardVector() * WorldHeight,
-			FLinearColor::Red,
-			1,
-			2.0f,
-			0
-		);
-	}
+	GridMaterial->SetVectorParameterValue("BackgroundColor", GridBackgroundColor);
+	GridMaterial->SetVectorParameterValue("WallColor", GridWallColor);
+	GridMaterial->SetVectorParameterValue("LineColor", GridLineColor);
 }

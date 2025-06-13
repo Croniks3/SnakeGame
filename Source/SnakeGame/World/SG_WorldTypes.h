@@ -18,4 +18,7 @@ struct FSnakeColors : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FLinearColor GridLineColor;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	FLinearColor SkyAtmosphereColor;
 };
