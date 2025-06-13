@@ -74,3 +74,12 @@ void ASG_GameMode::FindFog()
 		Fog = Cast<AExponentialHeightFog>(Fogs[0]);
 	}
 }
+
+void ASG_GameMode::NextColor()
+{
+	if (ColorsTable != nullptr)
+	{
+		ColorTableIndex = (ColorTableIndex + 1) % ColorsTable->GetRowNames().Num();
+		UpdateColors();
+	}
+}

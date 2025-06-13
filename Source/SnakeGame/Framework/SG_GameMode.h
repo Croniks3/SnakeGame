@@ -37,6 +37,10 @@ private:
 	UPROPERTY()
 	AExponentialHeightFog* Fog;
 
+	UFUNCTION(Exec, Category = "Console command")
+	void NextColor();
+
+private:
 	TUniquePtr<Snake::Game> Game;
 	uint32 ColorTableIndex{ 0 };
 
