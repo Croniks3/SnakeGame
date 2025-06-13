@@ -35,4 +35,13 @@ void ASG_GameMode::StartPlay()
 	check(Game->getGrid());
 
 	gridPawn->UpdateLocation(Game->getGrid()->dimensions(), CellSize, gridOrigin);
+
+	check(ColorsTable);
+	check(ColorsTable->GetRowNames().Num() > 0);
+	UpdateColors();
+}
+
+void ASG_GameMode::UpdateColors()
+{
+
 }
