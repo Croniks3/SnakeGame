@@ -1,5 +1,8 @@
 #pragma once
 
+#include "CoreMinimal.h"
+#include "Containers/List.h"
+
 namespace SnakeGame
 {
 	struct Dimensions
@@ -10,14 +13,44 @@ namespace SnakeGame
 
 	enum CellType
 	{
-		Empty = 0,
-		Wall = 1,
+		EmptyCell = 0,
+		WallCell,
+		SnakeCell,
 		// Food
-		// SnakeGame
+	};
+
+	struct Position
+	{
+		Position(uint32 inX, uint32 inY) : x(inX), y(inY) {}
+		uint32 x;
+		uint32 y;
+
+		FORCEINLINE Position& operator+=(const Position& rhs)
+		{
+			x += rhs.x;
+			y += rhs.y;
+			return *this;
+		}
+	};
+	
+	struct SnakeInput
+	{
+		int8 x;
+		int8 y;
+	};
+
+	struct SnakeSettings
+	{
+		uint32 defaultSize{4};
+		Position startPosition{0, 0};
 	};
 
 	struct Settings
 	{
-		Dimensions gridSize;
+		Dimensions gridSize{40, 10};
+		SnakeSettings snakeSettings;
 	};
+
+	using TSnakeList = TDoubleLinkedList<Position>;
+	using TSnakeListNode = TSnakeList::TDoubleLinkedListNode;
 }

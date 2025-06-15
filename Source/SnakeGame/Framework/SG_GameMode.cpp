@@ -10,12 +10,21 @@
 
 //#pragma optimize("", off)
 
+ASG_GameMode::ASG_GameMode()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
+
 void ASG_GameMode::StartPlay()
 {
 	Super::StartPlay();
 
 	// Init core game
-	SnakeGame::Settings settings{ GridSize.X, GridSize.Y };
+	SnakeGame::Settings settings;
+	settings.gridSize = SnakeGame::Dimensions{GridSize.X, GridSize.Y};
+	settings.snakeSettings.defaultSize = SnakeDefaultSize;
+	settings.snakeSettings.startPosition = SnakeGame::Position{GridSize.X / 2, GridSize.Y / 2};
+
 	Game = MakeUnique<SnakeGame::Game>(settings);
 	check(Game.IsValid());
 
@@ -51,6 +60,16 @@ void ASG_GameMode::StartPlay()
 	check(RowsCount > 0);
 	ColorTableIndex = FMath::RandRange(0, RowsCount - 1);
 	UpdateColors();
+}
+
+void ASG_GameMode::Tick(float deltaSeconds)
+{
+	Super::Tick(deltaSeconds);
+
+	if(Game.IsValid() == true)
+	{
+		Game->update(deltaSeconds, Input);
+	}
 }
 
 void ASG_GameMode::UpdateColors()

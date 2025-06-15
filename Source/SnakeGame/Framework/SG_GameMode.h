@@ -15,14 +15,19 @@ class SNAKEGAME_API ASG_GameMode : public AGameModeBase
 	GENERATED_BODY()
 	
 public:
+	ASG_GameMode();
 	virtual void StartPlay() override;
+	virtual void Tick(float deltaSeconds) override;
 
 protected:
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
 	FUint32Point GridSize{10, 10};
 
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
-	uint32 CellSize{ 10 };
+	uint32 CellSize{10};
+
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "4", ClampMax = "10"))
+	uint32 SnakeDefaultSize{5};
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASG_Grid> GridVisualClass;
@@ -42,7 +47,8 @@ private:
 
 private:
 	TUniquePtr<SnakeGame::Game> Game;
-	uint32 ColorTableIndex{ 0 };
+	uint32 ColorTableIndex{0};
+	SnakeGame::SnakeInput Input{1, 0};
 
 	void UpdateColors();
 	void FindFog();

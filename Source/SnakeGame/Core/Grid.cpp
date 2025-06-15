@@ -2,13 +2,15 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogGrid, All, All);
 
+//#pragma optimize("", off)
+
 using namespace SnakeGame;
 
 
 Grid::Grid(const Dimensions& gridSize) // 
 	: c_dimensions(Dimensions{gridSize.width + 2, gridSize.height + 2})
 {
-	m_cells.Init(CellType::Empty, c_dimensions.width * c_dimensions.height);
+	m_cells.Init(CellType::EmptyCell, c_dimensions.width * c_dimensions.height);
 
 	initWalls();
 	printDebug();
@@ -24,7 +26,7 @@ void Grid::initWalls()
 		bool IsFirstOrLastString = y == 0 || y == height - 1;
 		for (uint32 x = 0; x < width; x++)
 		{
-			CellType cellType = IsFirstOrLastString || x == 0 || x == width - 1 ? CellType::Wall : CellType::Empty;
+			CellType cellType = IsFirstOrLastString || x == 0 || x == width - 1 ? CellType::WallCell : CellType::EmptyCell;
 			m_cells[posToIndex(x, y)] = cellType;
 		}
 	}
@@ -44,11 +46,14 @@ void Grid::printDebug()
 			TCHAR symbol;
 			switch (m_cells[posToIndex(x, y)])
 			{
-				case CellType::Empty: 
+				case CellType::EmptyCell: 
 					symbol = '0'; 
 					break;
-				case CellType::Wall:
+				case CellType::WallCell:
 					symbol = '*';
+					break;
+				case CellType::SnakeCell:
+					symbol = '_';
 					break;
 			}
 			line.AppendChar(symbol).AppendChar(' ');
@@ -58,7 +63,24 @@ void Grid::printDebug()
 #endif
 }
 
+void SnakeGame::Grid::update(const TSnakeListNode* contentNode, CellType contentType)
+{
+	auto* currentNode = contentNode;
+	while(currentNode != nullptr)
+	{
+		uint32 index = posToIndex(currentNode->GetValue());
+		m_cells[index] = contentType;
+
+		currentNode = currentNode->GetNextNode();
+	}
+}
+
 uint32 Grid::posToIndex(uint32 x, uint32 y) const
 {
 	return y * c_dimensions.width + x;
+}
+
+uint32 SnakeGame::Grid::posToIndex(const Position& position) const
+{
+	return posToIndex(position.x, position.y);
 }
