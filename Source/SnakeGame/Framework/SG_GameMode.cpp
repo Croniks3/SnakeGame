@@ -33,7 +33,12 @@ void ASG_GameMode::StartPlay()
 	auto* pc = GetWorld()->GetFirstPlayerController();
 	check(pc);
 
-	auto* gridPawn = Cast<ASG_GridPawn>(pc->GetPawn());
+	ASG_GridPawn* gridPawn = Cast<ASG_GridPawn>(pc->GetPawn());
+	if (gridPawn == nullptr)
+	{
+		gridPawn = GetWorld()->SpawnActor<ASG_GridPawn>();
+		pc->SetPawn(gridPawn);
+	}
 	check(gridPawn);
 	check(Game->getGrid());
 
