@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Snake
+namespace SnakeGame
 {
 	struct Dimensions
 	{
@@ -13,7 +13,7 @@ namespace Snake
 		Empty = 0,
 		Wall = 1,
 		// Food
-		// Snake
+		// SnakeGame
 	};
 
 	struct Settings

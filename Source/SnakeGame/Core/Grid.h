@@ -4,7 +4,7 @@
 #include "SG_Types.h"
 
 
-namespace Snake
+namespace SnakeGame
 {
 	class Grid
 	{

@@ -16,8 +16,8 @@ void ASG_GameMode::StartPlay()
 	Super::StartPlay();
 
 	// Init core game
-	Snake::Settings settings{ GridSize.X, GridSize.Y };
-	Game = MakeUnique<Snake::Game>(settings);
+	SnakeGame::Settings settings{ GridSize.X, GridSize.Y };
+	Game = MakeUnique<SnakeGame::Game>(settings);
 	check(Game.IsValid());
 
 	// Init world grid

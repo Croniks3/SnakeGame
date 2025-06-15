@@ -4,7 +4,7 @@
 #include <Templates/SharedPointer.h>
 
 
-namespace Snake
+namespace SnakeGame
 {
 	class Grid;
 

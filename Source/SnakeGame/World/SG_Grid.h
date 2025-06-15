@@ -6,7 +6,7 @@
 
 #include "SG_Grid.generated.h"
 
-namespace Snake
+namespace SnakeGame
 {
 	class Grid;
 }
@@ -20,7 +20,7 @@ class SNAKEGAME_API ASG_Grid : public AActor
 
 public:
 	ASG_Grid();
-	void SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize);
+	void SetModel(const TSharedPtr<SnakeGame::Grid>& grid, uint32 cellSize);
 	void SetColors(FLinearColor& GridBackgroundColor, FLinearColor& GridWallColor, FLinearColor& GridLineColor);
 
 protected:
@@ -36,7 +36,7 @@ private:
 	UPROPERTY()
 	UMaterialInstanceDynamic* GridMaterial;
 
-	Snake::Dimensions GridDimensions;
+	SnakeGame::Dimensions GridDimensions;
 	uint32 CellSize;
 	uint32 WorldWidth;
 	uint32 WorldHeight;

@@ -24,7 +24,7 @@ void ASG_Grid::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ASG_Grid::SetModel(const TSharedPtr<Snake::Grid>& grid, uint32 cellSize)
+void ASG_Grid::SetModel(const TSharedPtr<SnakeGame::Grid>& grid, uint32 cellSize)
 {
 	if (grid.IsValid() == false)
 	{
