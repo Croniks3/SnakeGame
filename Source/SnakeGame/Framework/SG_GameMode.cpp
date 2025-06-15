@@ -8,7 +8,6 @@
 #include "Components/ExponentialHeightFogComponent.h"
 #include "Kismet/GameplayStatics.h"
 
-
 //#pragma optimize("", off)
 
 void ASG_GameMode::StartPlay()
@@ -34,7 +33,7 @@ void ASG_GameMode::StartPlay()
 	check(pc);
 
 	ASG_GridPawn* gridPawn = Cast<ASG_GridPawn>(pc->GetPawn());
-	if (gridPawn == nullptr)
+	if (gridPawn == nullptr && GetWorld()->IsEditorWorld() == true)
 	{
 		gridPawn = GetWorld()->SpawnActor<ASG_GridPawn>();
 		pc->SetPawn(gridPawn);
