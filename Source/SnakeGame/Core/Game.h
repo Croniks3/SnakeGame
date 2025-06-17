@@ -22,8 +22,12 @@ namespace SnakeGame
 		const Settings c_settings;
 		TSharedPtr<Grid> m_grid;
 		TSharedPtr<Snake> m_snake;
+		float m_timeSinceLastUpdate{0.0f};
+		bool m_gameOver{false};
 
 		void moveSnake(const SnakeInput& input);
 		void updateGrid();
+		bool checkUpdatePossibility(float deltaSeconds);
+		bool isDied() const;
 	};
 }

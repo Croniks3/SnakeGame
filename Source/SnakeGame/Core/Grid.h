@@ -14,12 +14,14 @@ namespace SnakeGame
 		Dimensions dimensions() const { return c_dimensions; }
 		void printDebug();
 		void update(const TSnakeListNode* contentNode, CellType contentType);
+		bool hitTest(const Position& snakeHeadPos, CellType hitWith) const;
 
 	private:
 		const Dimensions c_dimensions;
 		TArray<CellType> m_cells;
 
 		void initWalls();
+		void freeCellByType(CellType cellType);
 
 		FORCEINLINE uint32 posToIndex(uint32 x, uint32 y) const;
 		FORCEINLINE uint32 posToIndex(const Position& position) const;

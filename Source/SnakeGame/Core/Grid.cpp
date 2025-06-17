@@ -32,6 +32,38 @@ void Grid::initWalls()
 	}
 }
 
+void Grid::update(const TSnakeListNode* contentNode, CellType contentType)
+{
+	freeCellByType(contentType);
+
+	auto* currentNode = contentNode;
+	while(currentNode != nullptr)
+	{
+		uint32 index = posToIndex(currentNode->GetValue());
+		m_cells[index] = contentType;
+
+		currentNode = currentNode->GetNextNode();
+	}
+}
+
+bool Grid::hitTest(const Position& snakeHeadPos, CellType hitWith) const
+{
+	uint32 index = posToIndex(snakeHeadPos);
+
+	return m_cells[index] == hitWith;
+}
+
+void Grid::freeCellByType(CellType cellType)
+{
+	for(auto& cell : m_cells)
+	{
+		if(cell == cellType)
+		{
+			cell = CellType::EmptyCell;
+		}
+	}
+}
+
 void Grid::printDebug()
 {
 #if !UE_BUILD_SHIPPING
@@ -61,18 +93,6 @@ void Grid::printDebug()
 		UE_LOG(LogGrid, Display, TEXT("%s"), *line);
 	}
 #endif
-}
-
-void SnakeGame::Grid::update(const TSnakeListNode* contentNode, CellType contentType)
-{
-	auto* currentNode = contentNode;
-	while(currentNode != nullptr)
-	{
-		uint32 index = posToIndex(currentNode->GetValue());
-		m_cells[index] = contentType;
-
-		currentNode = currentNode->GetNextNode();
-	}
 }
 
 uint32 Grid::posToIndex(uint32 x, uint32 y) const

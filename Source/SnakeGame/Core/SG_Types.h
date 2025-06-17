@@ -49,6 +49,7 @@ namespace SnakeGame
 	{
 		Dimensions gridSize{40, 10};
 		SnakeSettings snakeSettings;
+		float gameSpeed{1.0f};
 	};
 
 	using TSnakeList = TDoubleLinkedList<Position>;

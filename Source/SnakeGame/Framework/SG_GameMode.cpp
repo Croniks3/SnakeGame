@@ -2,6 +2,7 @@
 #include "Core/SG_Types.h"
 #include "World/SG_WorldTypes.h"
 #include "World/SG_Grid.h"
+#include "World/SG_Snake.h"
 #include "Core/Grid.h"
 #include "Framework/SG_GridPawn.h"
 #include "Engine/ExponentialHeightFog.h"
@@ -24,6 +25,7 @@ void ASG_GameMode::StartPlay()
 	settings.gridSize = SnakeGame::Dimensions{GridSize.X, GridSize.Y};
 	settings.snakeSettings.defaultSize = SnakeDefaultSize;
 	settings.snakeSettings.startPosition = SnakeGame::Position{GridSize.X / 2, GridSize.Y / 2};
+	settings.gameSpeed = GameSpeed;
 
 	Game = MakeUnique<SnakeGame::Game>(settings);
 	check(Game.IsValid());
@@ -33,9 +35,14 @@ void ASG_GameMode::StartPlay()
 	check(GetWorld());
 	GridVisual = GetWorld()->SpawnActorDeferred<ASG_Grid>(GridVisualClass, gridOrigin);
 	check(GridVisual);
-
 	GridVisual->SetModel(Game->getGrid(), CellSize);
 	GridVisual->FinishSpawning(gridOrigin);
+
+	// Init world snake
+	SnakeVisual = GetWorld()->SpawnActorDeferred<ASG_Snake>(SnakeVisualClass, gridOrigin);
+	check(SnakeVisual);
+	SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
+	SnakeVisual->FinishSpawning(gridOrigin);
 
 	// Set gridPawn location fitting grid in viewport
 	auto* pc = GetWorld()->GetFirstPlayerController();

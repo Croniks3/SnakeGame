@@ -17,7 +17,18 @@ Game::Game(const Settings& settings) : c_settings(settings)
 
 void Game::update(float deltaSeconds, const SnakeInput& input)
 {
+	if(checkUpdatePossibility(deltaSeconds) == false || m_gameOver == true)
+	{
+		return;
+	}
+
 	moveSnake(input);
+
+	if(isDied() == true)
+	{
+		m_gameOver = true;
+		UE_LOG(LogGrid, Display, TEXT("------------- Game over! ------------- "));
+	}
 }
 
 void Game::moveSnake(const SnakeInput& input)
@@ -30,4 +41,23 @@ void Game::updateGrid()
 {
 	m_grid->update(m_snake->getBody(), CellType::SnakeCell);
 	m_grid->printDebug();
+}
+
+bool SnakeGame::Game::checkUpdatePossibility(float deltaSeconds)
+{
+	m_timeSinceLastUpdate += deltaSeconds;
+
+	if(m_timeSinceLastUpdate >= c_settings.gameSpeed)
+	{
+		m_timeSinceLastUpdate = 0.0f;
+		return true;
+	}
+
+	return false;
+}
+
+bool Game::isDied() const
+{
+	return m_grid->hitTest(m_snake->getHeadPosition(), CellType::WallCell) ||
+		m_grid->hitTest(m_snake->getHeadPosition(), CellType::SnakeCell);
 }

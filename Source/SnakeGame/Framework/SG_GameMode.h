@@ -7,6 +7,7 @@
 #include "SG_GameMode.generated.h"
 
 class ASG_Grid;
+class ASG_Snake;
 class AExponentialHeightFog;
 
 UCLASS()
@@ -20,24 +21,33 @@ public:
 	virtual void Tick(float deltaSeconds) override;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"), Category = "Settings")
 	FUint32Point GridSize{10, 10};
 
-	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"))
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"), Category = "Settings")
 	uint32 CellSize{10};
 
-	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "4", ClampMax = "10"))
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "4", ClampMax = "10"), Category = "Settings")
 	uint32 SnakeDefaultSize{5};
+
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "0.05", ClampMax = "2.0"), Category = "Settings")
+	float GameSpeed{1.0f};
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASG_Grid> GridVisualClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASG_Snake> SnakeVisualClass;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
 	UDataTable* ColorsTable;
 
 private:
 	UPROPERTY()
 	ASG_Grid* GridVisual;
+
+	UPROPERTY()
+	ASG_Snake* SnakeVisual;
 
 	UPROPERTY()
 	AExponentialHeightFog* Fog;
