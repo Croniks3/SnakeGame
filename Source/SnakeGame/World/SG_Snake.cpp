@@ -50,5 +50,5 @@ void ASG_Snake::Tick(float DeltaTime)
 
 FVector ASG_Snake::LinkPositionToVector(const SnakeGame::Position& linkPosition, uint32 cellSize, const SnakeGame::Dimensions& gridDimensions) const
 {
-	return FVector(linkPosition.y * cellSize, linkPosition.x * cellSize, 0.0);
+	return FVector((gridDimensions.height - 1 - linkPosition.y) * cellSize, linkPosition.x * cellSize, 0.0) + FVector(cellSize * 0.5);
 }

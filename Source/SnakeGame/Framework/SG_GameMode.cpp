@@ -7,7 +7,9 @@
 #include "Framework/SG_GridPawn.h"
 #include "Engine/ExponentialHeightFog.h"
 #include "Components/ExponentialHeightFogComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
+#include <EnhancedInputComponent.h>
 
 //#pragma optimize("", off)
 
@@ -67,6 +69,8 @@ void ASG_GameMode::StartPlay()
 	check(RowsCount > 0);
 	ColorTableIndex = FMath::RandRange(0, RowsCount - 1);
 	UpdateColors();
+
+	SetupInput();
 }
 
 void ASG_GameMode::Tick(float deltaSeconds)
@@ -112,4 +116,32 @@ void ASG_GameMode::NextColor()
 		ColorTableIndex = (ColorTableIndex + 1) % ColorsTable->GetRowNames().Num();
 		UpdateColors();
 	}
+}
+
+void ASG_GameMode::SetupInput()
+{
+	if(GetWorld() == nullptr) { return; }
+	auto* pc = GetWorld()->GetFirstPlayerController();
+	if(pc != nullptr)
+	{
+		if(auto* InputSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(pc->GetLocalPlayer()))
+		{
+			InputSystem->AddMappingContext(SnakeInputMappingContext, 0);
+		}
+
+		auto* enhancedInput = Cast<UEnhancedInputComponent>(pc->InputComponent);
+		check(enhancedInput);
+		enhancedInput->BindAction(MoveForwardInputAction, ETriggerEvent::Triggered, this, &ThisClass::OnMoveForward);
+		enhancedInput->BindAction(MoveRightInputAction, ETriggerEvent::Triggered, this, &ThisClass::OnMoveRight);
+	}
+}
+
+void ASG_GameMode::OnMoveForward(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Display, TEXT("OnMoveForward"));
+}
+
+void ASG_GameMode::OnMoveRight(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemp, Display, TEXT("OnMoveRight"));
 }
