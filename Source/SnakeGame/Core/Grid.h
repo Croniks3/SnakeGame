@@ -19,6 +19,11 @@ namespace SnakeGame
 	private:
 		const Dimensions c_dimensions;
 		TArray<CellType> m_cells;
+		TMap<CellType, uint32> m_indByType
+		{
+			{CellType::WallCell, {}},
+			{CellType::SnakeCell, {}}
+		};
 
 		void initWalls();
 		void freeCellByType(CellType cellType);
