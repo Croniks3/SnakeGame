@@ -23,13 +23,7 @@ void ASG_GameMode::StartPlay()
 	Super::StartPlay();
 
 	// Init core game
-	SnakeGame::Settings settings;
-	settings.gridSize = SnakeGame::Dimensions{GridSize.X, GridSize.Y};
-	settings.snakeSettings.defaultSize = SnakeDefaultSize;
-	settings.snakeSettings.startPosition = SnakeGame::Position{GridSize.X / 2, GridSize.Y / 2};
-	settings.gameSpeed = GameSpeed;
-
-	Game = MakeUnique<SnakeGame::Game>(settings);
+	Game = MakeUnique<SnakeGame::Game>(CreateGameSettings());
 	check(Game.IsValid());
 
 	// Init world grid
@@ -134,6 +128,7 @@ void ASG_GameMode::SetupInput()
 		check(enhancedInput);
 		enhancedInput->BindAction(MoveForwardInputAction, ETriggerEvent::Triggered, this, &ThisClass::OnMoveForward);
 		enhancedInput->BindAction(MoveRightInputAction, ETriggerEvent::Triggered, this, &ThisClass::OnMoveRight);
+		enhancedInput->BindAction(ResetGameInputAction, ETriggerEvent::Started, this, &ThisClass::OnResetGame);
 	}
 }
 
@@ -153,4 +148,30 @@ void ASG_GameMode::OnMoveRight(const FInputActionValue& Value)
 		Input.y = 0;
 		Input.x = static_cast<int8>(Value.Get<float>());
 	}
+}
+
+void ASG_GameMode::OnResetGame(const FInputActionValue& Value)
+{
+	if(Value.Get<bool>() == true)
+	{
+		Game.Reset(new SnakeGame::Game(CreateGameSettings()));
+		check(Game.IsValid());
+
+		GridVisual->SetModel(Game->getGrid(), CellSize);
+		SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
+		Input = SnakeGame::SnakeInput{1, 0};
+		NextColor();
+	}
+}
+
+SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
+{
+	SnakeGame::Settings settings;
+
+	settings.gridSize = SnakeGame::Dimensions{GridSize.X, GridSize.Y};
+	settings.snakeSettings.defaultSize = SnakeDefaultSize;
+	settings.snakeSettings.startPosition = SnakeGame::Position{GridSize.X / 2 + 1, GridSize.Y / 2 + 1};
+	settings.gameSpeed = GameSpeed;
+
+	return settings;
 }

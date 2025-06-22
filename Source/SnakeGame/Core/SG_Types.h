@@ -56,7 +56,10 @@ namespace SnakeGame
 		SnakeSettings snakeSettings;
 		float gameSpeed{1.0f};
 	};
+	
+	class TSnakeList : public TDoubleLinkedList<Position>
+	{
 
-	using TSnakeList = TDoubleLinkedList<Position>;
+	};
 	using TSnakeListNode = TSnakeList::TDoubleLinkedListNode;
 }
