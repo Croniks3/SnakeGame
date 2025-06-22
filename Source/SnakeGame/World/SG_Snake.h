@@ -6,6 +6,8 @@
 #include "Core/SG_Types.h"
 #include "SG_Snake.generated.h"
 
+class ASG_SnakeLink;
+
 UCLASS()
 class SNAKEGAME_API ASG_Snake : public AActor
 {
@@ -15,6 +17,7 @@ public:
 	ASG_Snake();
 
 	void SetModel(const TSharedPtr<SnakeGame::Snake>& Snake, uint32 CellSize, const SnakeGame::Dimensions& gridDimensions);
+	void SetColors(const FLinearColor& HeadColor, const FLinearColor& LinkColor);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -34,7 +37,7 @@ private:
 	SnakeGame::Dimensions GridDimensions;
 
 	UPROPERTY()
-	TArray<AActor*> SnakeLinks;
+	TArray<ASG_SnakeLink*> SnakeLinks;
 
 	FVector LinkPositionToVector(const SnakeGame::Position& linkPosition, uint32 CellSize, const SnakeGame::Dimensions& GridDimensions) const;
 };

@@ -90,6 +90,7 @@ void ASG_GameMode::UpdateColors()
 	if (colorsSet != nullptr)
 	{
 		GridVisual->SetColors(colorsSet->GridBackgroundColor, colorsSet->GridWallColor, colorsSet->GridLineColor);
+		SnakeVisual->SetColors(colorsSet->SnakeHeadColor, colorsSet->SnakeLinkColor);
 
 		if (Fog != nullptr && Fog->GetComponent() != nullptr)
 		{

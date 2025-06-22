@@ -1,4 +1,5 @@
 #include "World/SG_Snake.h"
+#include "World/SG_SnakeLink.h"
 
 
 ASG_Snake::ASG_Snake()
@@ -11,6 +12,16 @@ void ASG_Snake::SetModel(const TSharedPtr<SnakeGame::Snake>& InSnake, uint32 InC
 	Snake = InSnake;
 	CellSize = InCellSize;
 	GridDimensions = InGridDimensions;
+}
+
+void ASG_Snake::SetColors(const FLinearColor& HeadColor, const FLinearColor& LinkColor)
+{
+	for(int32 i = 0; i < SnakeLinks.Num(); ++i)
+	{
+		const bool isHead = i == 0;
+		ASG_SnakeLink* SnakeLink = SnakeLinks[i];
+		SnakeLink->SetColor(isHead ? HeadColor : LinkColor);
+	}
 }
 
 void ASG_Snake::BeginPlay()
@@ -26,7 +37,9 @@ void ASG_Snake::BeginPlay()
 	{
 		const bool isHead = i == 0;
 		const FTransform transform = FTransform(LinkPositionToVector(link, CellSize, GridDimensions));
-		AActor* snakeLink = GetWorld()->SpawnActor<AActor>(isHead ? SnakeHeadClass : SnakeLinkClass, transform);
+		ASG_SnakeLink* snakeLink = GetWorld()->SpawnActorDeferred<ASG_SnakeLink>(isHead ? SnakeHeadClass : SnakeLinkClass, transform);
+		snakeLink->SetScale(CellSize);
+		snakeLink->FinishSpawning(transform);
 		SnakeLinks.Add(snakeLink);
 		++i;
 	}

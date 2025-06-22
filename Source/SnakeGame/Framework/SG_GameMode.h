@@ -43,7 +43,7 @@ protected:
 	TSubclassOf<ASG_Snake> SnakeVisualClass;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
-	UDataTable* ColorsTable;
+	TObjectPtr <UDataTable> ColorsTable;
 
 	UPROPERTY(EditDefaultsOnly, Category = "SnakeInput")
 	TObjectPtr<UInputAction> MoveForwardInputAction;
