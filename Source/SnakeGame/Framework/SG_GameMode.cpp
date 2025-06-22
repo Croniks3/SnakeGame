@@ -138,10 +138,18 @@ void ASG_GameMode::SetupInput()
 
 void ASG_GameMode::OnMoveForward(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Display, TEXT("OnMoveForward"));
+	if(Value.Get<bool>() == true)
+	{
+		Input.y = static_cast<int8>(Value.Get<float>());
+		Input.x = 0;
+	}
 }
 
 void ASG_GameMode::OnMoveRight(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Display, TEXT("OnMoveRight"));
+	if(Value.Get<bool>() == true)
+	{
+		Input.y = 0;
+		Input.x = static_cast<int8>(Value.Get<float>());
+	}
 }

@@ -37,6 +37,11 @@ namespace SnakeGame
 	{
 		int8 x;
 		int8 y;
+
+		FORCEINLINE bool IsOpossite(const SnakeInput& other) const
+		{
+			return ((x + other.x) == 0 && x != 0) || ((y + other.y) == 0 && y != 0);
+		}
 	};
 
 	struct SnakeSettings
