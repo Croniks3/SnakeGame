@@ -73,7 +73,7 @@ private:
 private:
 	TUniquePtr<SnakeGame::Game> Game;
 	uint32 ColorTableIndex{0};
-	SnakeGame::SnakeInput Input{1, 0};
+	SnakeGame::SnakeInput Input{SnakeGame::SnakeInput::Default};
 
 	void UpdateColors();
 	void FindFog();

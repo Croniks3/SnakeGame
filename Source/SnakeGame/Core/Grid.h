@@ -16,6 +16,8 @@ namespace SnakeGame
 		void update(const TSnakeListNode* contentNode, CellType contentType);
 		bool hitTest(const Position& snakeHeadPos, CellType hitWith) const;
 
+		static Position center(uint32 width, uint32 height) { return Position{width / 2 + 1, height / 2 + 1}; }
+
 	private:
 		const Dimensions c_dimensions;
 		TArray<CellType> m_cells;

@@ -134,20 +134,18 @@ void ASG_GameMode::SetupInput()
 
 void ASG_GameMode::OnMoveForward(const FInputActionValue& Value)
 {
-	if(Value.Get<bool>() == true)
-	{
-		Input.y = static_cast<int8>(Value.Get<float>());
-		Input.x = 0;
-	}
+	const float InputValue = Value.Get<float>();
+	if(InputValue == 0.0f) { return; }
+	Input.x = 0;
+	Input.y = static_cast<int8>(InputValue);
 }
 
 void ASG_GameMode::OnMoveRight(const FInputActionValue& Value)
 {
-	if(Value.Get<bool>() == true)
-	{
-		Input.y = 0;
-		Input.x = static_cast<int8>(Value.Get<float>());
-	}
+	const float InputValue = Value.Get<float>();
+	if(InputValue == 0.0f) { return; }
+	Input.x = static_cast<int8>(InputValue);
+	Input.y = 0;
 }
 
 void ASG_GameMode::OnResetGame(const FInputActionValue& Value)
@@ -159,7 +157,7 @@ void ASG_GameMode::OnResetGame(const FInputActionValue& Value)
 
 		GridVisual->SetModel(Game->getGrid(), CellSize);
 		SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
-		Input = SnakeGame::SnakeInput{1, 0};
+		Input = SnakeGame::SnakeInput::Default;
 		NextColor();
 	}
 }
@@ -170,7 +168,8 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 
 	settings.gridSize = SnakeGame::Dimensions{GridSize.X, GridSize.Y};
 	settings.snakeSettings.defaultSize = SnakeDefaultSize;
-	settings.snakeSettings.startPosition = SnakeGame::Position{GridSize.X / 2 + 1, GridSize.Y / 2 + 1};
+	settings.snakeSettings.startPosition = SnakeGame::Grid::center(GridSize.X, GridSize.Y);
+		/*SnakeGame::Position{GridSize.X / 2 + 1, GridSize.Y / 2 + 1}*/;
 	settings.gameSpeed = GameSpeed;
 
 	return settings;

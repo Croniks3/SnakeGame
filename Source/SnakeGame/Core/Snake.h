@@ -19,6 +19,6 @@ namespace SnakeGame
 		
 	private:
 		TSnakeList m_links;
-		SnakeInput lastInput{1, 0};
+		SnakeInput lastInput{SnakeGame::SnakeInput::Default};
 	};
 }

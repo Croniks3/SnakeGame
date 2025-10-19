@@ -31,6 +31,8 @@ namespace SnakeGame
 			y += rhs.y;
 			return *this;
 		}
+
+		static const Position Zero;
 	};
 	
 	struct SnakeInput
@@ -42,12 +44,14 @@ namespace SnakeGame
 		{
 			return ((x + other.x) == 0 && x != 0) || ((y + other.y) == 0 && y != 0);
 		}
+
+		static const SnakeInput Default;
 	};
 
 	struct SnakeSettings
 	{
 		uint32 defaultSize{4};
-		Position startPosition{0, 0};
+		Position startPosition{Position::Zero};
 	};
 
 	struct Settings
