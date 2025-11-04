@@ -26,8 +26,12 @@ void Grid::initWalls()
 		bool IsFirstOrLastString = y == 0 || y == height - 1;
 		for (uint32 x = 0; x < width; x++)
 		{
-			CellType cellType = IsFirstOrLastString || x == 0 || x == width - 1 ? CellType::WallCell : CellType::EmptyCell;
-			m_cells[posToIndex(x, y)] = cellType;
+			if(x == 0 || x == width - 1 || y == 0 || y == height - 1)
+			{
+				const auto index = posToIndex(x, y);
+				m_cells[index] = CellType::WallCell;
+				m_indByType[CellType::WallCell].Add(index);
+			}	
 		}
 	}
 }
@@ -39,11 +43,22 @@ void Grid::update(const TSnakeListNode* contentNode, CellType contentType)
 	auto* currentNode = contentNode;
 	while(currentNode != nullptr)
 	{
-		uint32 index = posToIndex(currentNode->GetValue());
-		m_cells[index] = contentType;
-
+		updateInternal(currentNode->GetValue(), contentType);
 		currentNode = currentNode->GetNextNode();
 	}
+}
+
+void Grid::update(const Position& position, CellType contentType)
+{
+	freeCellByType(contentType);
+	updateInternal(position, contentType);
+}
+
+void SnakeGame::Grid::updateInternal(const Position& position, CellType contentType)
+{
+	uint32 index = posToIndex(position);
+	m_cells[index] = contentType;
+	m_indByType[contentType].Add(index);
 }
 
 bool Grid::hitTest(const Position& snakeHeadPos, CellType hitWith) const
@@ -55,13 +70,12 @@ bool Grid::hitTest(const Position& snakeHeadPos, CellType hitWith) const
 
 void Grid::freeCellByType(CellType cellType)
 {
-	for(auto& cell : m_cells)
+	TArray<uint32> cellIndices = m_indByType[cellType];
+	for(auto& cellIndex : cellIndices)
 	{
-		if(cell == cellType)
-		{
-			cell = CellType::EmptyCell;
-		}
+		m_cells[cellIndex] = CellType::EmptyCell;
 	}
+	cellIndices.Empty();
 }
 
 void Grid::printDebug()
@@ -86,6 +100,9 @@ void Grid::printDebug()
 					break;
 				case CellType::SnakeCell:
 					symbol = '_';
+					break;
+				case CellType::FoodCell:
+					symbol = 'F';
 					break;
 			}
 			line.AppendChar(symbol).AppendChar(' ');

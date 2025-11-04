@@ -5,6 +5,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogGrid, All, All);
 
+//#pragma optimize("", off)
+
 using namespace SnakeGame;
 
 
@@ -68,5 +70,5 @@ bool Game::isDied() const
 void SnakeGame::Game::generateFood()
 {
 	m_food->setPosition(Position{1, 1});
-	//m_grid->update(m_food->getPosition(), CellType::FoodCell);
+	m_grid->update(m_food->getPosition(), CellType::FoodCell);
 }
