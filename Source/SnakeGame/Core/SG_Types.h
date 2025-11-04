@@ -11,12 +11,12 @@ namespace SnakeGame
 		uint32 height;
 	};
 
-	enum CellType
+	enum class CellType
 	{
 		EmptyCell = 0,
 		WallCell,
 		SnakeCell,
-		// Food
+		FoodCell
 	};
 
 	struct Position

@@ -1,6 +1,7 @@
 #include "Core/Game.h"
 #include "Core/Grid.h"
 #include "Core/Snake.h"
+#include "Core/Food.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogGrid, All, All);
 
@@ -11,8 +12,10 @@ Game::Game(const Settings& settings) : c_settings(settings)
 {
 	m_grid = MakeShared<Grid>(settings.gridSize);
 	m_snake = MakeShared<Snake>(settings.snakeSettings);
+	m_food = MakeShared<Food>();
 
 	updateGrid();
+	generateFood();
 }
 
 void Game::update(float deltaSeconds, const SnakeInput& input)
@@ -60,4 +63,10 @@ bool Game::isDied() const
 {
 	return m_grid->hitTest(m_snake->getHeadPosition(), CellType::WallCell) ||
 		m_grid->hitTest(m_snake->getHeadPosition(), CellType::SnakeCell);
+}
+
+void SnakeGame::Game::generateFood()
+{
+	m_food->setPosition(Position{1, 1});
+	//m_grid->update(m_food->getPosition(), CellType::FoodCell);
 }

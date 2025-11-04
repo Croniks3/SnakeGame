@@ -8,6 +8,8 @@ namespace SnakeGame
 {
 	class Grid;
 	class Snake;
+	class Food;
+
 	
 	class Game
 	{
@@ -15,6 +17,7 @@ namespace SnakeGame
 		Game(const Settings& settings);
 		TSharedPtr<Grid> getGrid() const { return m_grid; };
 		TSharedPtr<Snake> getSnake() const { return m_snake; };
+		TSharedPtr<Food> getFood() const { return m_food; };
 
 		void update(float deltaSeconds, const SnakeInput& input);
 
@@ -22,6 +25,7 @@ namespace SnakeGame
 		const Settings c_settings;
 		TSharedPtr<Grid> m_grid;
 		TSharedPtr<Snake> m_snake;
+		TSharedPtr<Food> m_food;
 		float m_timeSinceLastUpdate{0.0f};
 		bool m_gameOver{false};
 
@@ -29,5 +33,6 @@ namespace SnakeGame
 		void updateGrid();
 		bool checkUpdatePossibility(float deltaSeconds);
 		bool isDied() const;
+		void generateFood();
 	};
 }
