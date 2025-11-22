@@ -17,6 +17,8 @@ namespace SnakeGame
 		void update(const Position& position, CellType contentType);
 		bool hitTest(const Position& snakeHeadPos, CellType hitWith) const;
 
+		Position getRandomEmptyPosition() const;
+
 		static Position center(uint32 width, uint32 height) { return Position{width / 2 + 1, height / 2 + 1}; }
 
 	private:
@@ -35,5 +37,6 @@ namespace SnakeGame
 
 		FORCEINLINE uint32 posToIndex(uint32 x, uint32 y) const;
 		FORCEINLINE uint32 posToIndex(const Position& position) const;
+		FORCEINLINE Position indexToPos(uint32 index) const;
 	};
 }

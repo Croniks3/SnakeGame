@@ -69,6 +69,6 @@ bool Game::isDied() const
 
 void SnakeGame::Game::generateFood()
 {
-	m_food->setPosition(Position{1, 1});
+	m_food->setPosition(m_grid->getRandomEmptyPosition());
 	m_grid->update(m_food->getPosition(), CellType::FoodCell);
 }

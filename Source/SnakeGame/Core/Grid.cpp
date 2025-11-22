@@ -68,6 +68,31 @@ bool Grid::hitTest(const Position& snakeHeadPos, CellType hitWith) const
 	return m_cells[index] == hitWith;
 }
 
+Position SnakeGame::Grid::getRandomEmptyPosition() const
+{
+	const auto gridSize = c_dimensions.height * c_dimensions.width;
+	const auto randIndex = FMath::RandRange(0, gridSize - 1);
+	
+	for(uint32 i = randIndex; i < gridSize; ++i)
+	{
+		if(m_cells[i] == CellType::EmptyCell)
+		{
+			return indexToPos(i);
+		}
+	}
+	
+	for(int32 i = 0; i < randIndex; ++i)
+	{
+		if(m_cells[i] == CellType::EmptyCell)
+		{
+			return indexToPos(i);
+		}
+	}
+
+	UE_LOG(LogGrid, Error, TEXT("Empty cell dosn't exist!"));
+	return Position(-1, -1);
+}
+
 void Grid::freeCellByType(CellType cellType)
 {
 	TArray<uint32> cellIndices = m_indByType[cellType];
@@ -120,4 +145,11 @@ uint32 Grid::posToIndex(uint32 x, uint32 y) const
 uint32 SnakeGame::Grid::posToIndex(const Position& position) const
 {
 	return posToIndex(position.x, position.y);
+}
+
+Position SnakeGame::Grid::indexToPos(uint32 index) const
+{
+	uint32 x = index % c_dimensions.width;
+	uint32 y = index / c_dimensions.width;
+	return Position(x, y);
 }
