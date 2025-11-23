@@ -1,5 +1,6 @@
 #include "World/SG_Snake.h"
 #include "World/SG_SnakeLink.h"
+#include "SG_WorldUtils.h"
 
 
 ASG_Snake::ASG_Snake()
@@ -36,7 +37,7 @@ void ASG_Snake::BeginPlay()
 	for(const auto& link : links)
 	{
 		const bool isHead = i == 0;
-		const FTransform transform = FTransform(LinkPositionToVector(link, CellSize, GridDimensions));
+		const FTransform transform = FTransform(SnakeGame::WorldUtils::GridPositionToVector(link, CellSize, GridDimensions));
 		ASG_SnakeLink* snakeLink = GetWorld()->SpawnActorDeferred<ASG_SnakeLink>(isHead ? SnakeHeadClass : SnakeLinkClass, transform);
 		snakeLink->SetScale(CellSize);
 		snakeLink->FinishSpawning(transform);
@@ -56,12 +57,7 @@ void ASG_Snake::Tick(float DeltaTime)
 
 	for(auto* actorLink : SnakeLinks)
 	{
-		actorLink->SetActorLocation(LinkPositionToVector(modelLinkPtr->GetValue(), CellSize, GridDimensions));
+		actorLink->SetActorLocation(SnakeGame::WorldUtils::GridPositionToVector(modelLinkPtr->GetValue(), CellSize, GridDimensions));
 		modelLinkPtr = modelLinkPtr->GetNextNode();
 	}
-}
-
-FVector ASG_Snake::LinkPositionToVector(const SnakeGame::Position& linkPosition, uint32 cellSize, const SnakeGame::Dimensions& gridDimensions) const
-{
-	return FVector((gridDimensions.height - 1 - linkPosition.y) * cellSize, linkPosition.x * cellSize, 0.0) + FVector(cellSize * 0.5);
 }

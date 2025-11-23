@@ -38,6 +38,4 @@ private:
 
 	UPROPERTY()
 	TArray<ASG_SnakeLink*> SnakeLinks;
-
-	FVector LinkPositionToVector(const SnakeGame::Position& linkPosition, uint32 CellSize, const SnakeGame::Dimensions& GridDimensions) const;
 };
