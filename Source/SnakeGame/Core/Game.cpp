@@ -3,7 +3,7 @@
 #include "Core/Snake.h"
 #include "Core/Food.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogGrid, All, All);
+DEFINE_LOG_CATEGORY_STATIC(LogGame, All, All);
 
 //#pragma optimize("", off)
 
@@ -16,8 +16,9 @@ Game::Game(const Settings& settings) : c_settings(settings)
 	m_snake = MakeShared<Snake>(settings.snakeSettings);
 	m_food = MakeShared<Food>();
 
-	updateGrid();
+	m_grid->update(m_snake->getBody(), CellType::SnakeCell);
 	generateFood();
+	m_grid->update(m_food->getPosition(), CellType::FoodCell);
 }
 
 void Game::update(float deltaSeconds, const SnakeInput& input)
@@ -27,25 +28,38 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 		return;
 	}
 
-	moveSnake(input);
+	m_snake->move(input);
+
+	if(m_foodTaken == true)
+	{
+		++m_scores;
+		m_snake->increase();
+		m_grid->update(m_snake->getBody(), CellType::SnakeCell);
+		generateFood();
+	}
 
 	if(isDied() == true)
 	{
 		m_gameOver = true;
-		UE_LOG(LogGrid, Display, TEXT("------------- Game over! ------------- "));
+		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()): ------------- Game over! ------------- "));
+		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()): ------------- SCORES: %i! ------------- "), m_scores);
+		return;
 	}
-}
 
-void Game::moveSnake(const SnakeInput& input)
-{
-	m_snake->move(input);
+	m_foodTaken = takeFood();
 	updateGrid();
 }
 
 void Game::updateGrid()
 {
 	m_grid->update(m_snake->getBody(), CellType::SnakeCell);
+	m_grid->update(m_food->getPosition(), CellType::FoodCell);
+
+	UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()):-------------------------- "));
+
 	m_grid->printDebug();
+	m_snake->printDebug();
+	m_food->printDebug();
 }
 
 bool SnakeGame::Game::checkUpdatePossibility(float deltaSeconds)
@@ -67,8 +81,12 @@ bool Game::isDied() const
 		m_grid->hitTest(m_snake->getHeadPosition(), CellType::SnakeCell);
 }
 
+bool SnakeGame::Game::takeFood() const
+{
+	return m_grid->hitTest(m_snake->getHeadPosition(), CellType::FoodCell);
+}
+
 void SnakeGame::Game::generateFood()
 {
-	m_food->setPosition(m_grid->getRandomEmptyPosition());
-	m_grid->update(m_food->getPosition(), CellType::FoodCell);
+	m_food->setPosition(m_grid->getRandomEmptyPosition(m_snake->getHeadPosition()));
 }

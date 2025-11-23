@@ -26,13 +26,16 @@ namespace SnakeGame
 		TSharedPtr<Grid> m_grid;
 		TSharedPtr<Snake> m_snake;
 		TSharedPtr<Food> m_food;
+
 		float m_timeSinceLastUpdate{0.0f};
 		bool m_gameOver{false};
-
-		void moveSnake(const SnakeInput& input);
+		bool m_foodTaken{false};
+		uint32 m_scores{0};
+		
 		void updateGrid();
 		bool checkUpdatePossibility(float deltaSeconds);
 		bool isDied() const;
+		bool takeFood() const;
 		void generateFood();
 	};
 }
