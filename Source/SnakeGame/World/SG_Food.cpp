@@ -23,7 +23,7 @@ void ASG_Food::SetModel(const TSharedPtr<SnakeGame::Food>& InFood, uint32 InCell
 	CellSize = InCellSize;
 	GridDimensions = InGridDimensions;
 
-	// scale
+	SnakeGame::WorldUtils::ScaleMeshByWorldSize(FoodMesh, FVector(CellSize));
 }
 
 void ASG_Food::SetColor(const FLinearColor& Color)

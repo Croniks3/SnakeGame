@@ -9,6 +9,7 @@
 
 class ASG_Grid;
 class ASG_Snake;
+class ASG_Food;
 class AExponentialHeightFog;
 class UInputAction;
 class UInputMappingContext;
@@ -41,6 +42,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASG_Snake> SnakeVisualClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<ASG_Food> FoodVisualClass;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
 	TObjectPtr <UDataTable> ColorsTable;
@@ -63,6 +67,9 @@ private:
 
 	UPROPERTY()
 	ASG_Snake* SnakeVisual;
+
+	UPROPERTY()
+	ASG_Food* FoodVisual;
 
 	UPROPERTY()
 	AExponentialHeightFog* Fog;

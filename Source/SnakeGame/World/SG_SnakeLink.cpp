@@ -1,5 +1,6 @@
 #include "World/SG_SnakeLink.h"
 #include "Components/StaticMeshComponent.h"
+#include "SG_WorldUtils.h"
 
 
 #define GET_VAR_NAME(var) #var
@@ -28,11 +29,5 @@ void ASG_SnakeLink::SetColor(const FLinearColor& Color)
 
 void ASG_SnakeLink::SetScale(uint32 CellSize)
 {
-	auto staticMesh = LinkMesh->GetStaticMesh();
-	check(staticMesh);
-	const FBox Box = staticMesh->GetBoundingBox();
-	const auto BoxSize = Box.GetSize();
-
-	check(BoxSize.X); check(BoxSize.Y);
-	LinkMesh->SetRelativeScale3D(FVector(CellSize / BoxSize.X, CellSize / BoxSize.Y, CellSize / BoxSize.Z));
+	SnakeGame::WorldUtils::ScaleMeshByWorldSize(LinkMesh, FVector(CellSize));
 }
