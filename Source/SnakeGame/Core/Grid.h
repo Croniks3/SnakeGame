@@ -18,6 +18,7 @@ namespace SnakeGame
 		bool hitTest(const Position& snakeHeadPos, CellType hitWith) const;
 
 		Position getRandomEmptyPosition() const;
+		Position getRandomEmptyPosition(const Position& snakeHeadPos) const;
 
 		static Position center(uint32 width, uint32 height) { return Position{width / 2 + 1, height / 2 + 1}; }
 

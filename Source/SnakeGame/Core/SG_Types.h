@@ -32,6 +32,33 @@ namespace SnakeGame
 			return *this;
 		}
 
+		FORCEINLINE Position& operator-=(const Position& rhs)
+		{
+			x -= rhs.x;
+			y -= rhs.y;
+			return *this;
+		}
+
+		FORCEINLINE Position operator+(const Position& Other) const
+		{
+			return Position(x + Other.x, y + Other.y);
+		}
+
+		FORCEINLINE Position operator-(const Position& Other) const
+		{
+			return Position(x - Other.x, y - Other.y);
+		}
+
+		FORCEINLINE bool operator==(const Position& Other) const
+		{
+			return x == Other.x && y == Other.y;
+		}
+
+		FORCEINLINE bool operator!=(const Position& Other) const
+		{
+			return !(*this == Other);
+		}
+
 		static const Position Zero;
 	};
 	
@@ -65,10 +92,10 @@ namespace SnakeGame
 	class TSnakeList : public TDoubleLinkedList<Position>
 	{
 	public:
-		void MoveTail(TSnakeListNode* Tail, TSnakeListNode* Head, const Position& Pos)
+		void MoveTail(TSnakeListNode* Tail, TSnakeListNode* Head, const Position& HeadPos)
 		{
 			RemoveNode(Tail);
-			InsertNode(Pos, Head->GetNextNode());
+			InsertNode(HeadPos, Head->GetNextNode());
 		}
 	};	
 }

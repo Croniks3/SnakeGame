@@ -93,6 +93,39 @@ Position SnakeGame::Grid::getRandomEmptyPosition() const
 	return Position(-1, -1);
 }
 
+Position SnakeGame::Grid::getRandomEmptyPosition(const Position& snakeHeadPos) const
+{
+	const auto gridSize = c_dimensions.height * c_dimensions.width;
+	const auto randIndex = FMath::RandRange(0, gridSize - 1);
+
+	for(uint32 i = randIndex; i < gridSize; ++i)
+	{
+		if(m_cells[i] == CellType::EmptyCell)
+		{
+			Position randomPosition = indexToPos(i);
+			if(randomPosition != snakeHeadPos)
+			{
+				return randomPosition;
+			}	
+		}
+	}
+
+	for(int32 i = 0; i < randIndex; ++i)
+	{
+		if(m_cells[i] == CellType::EmptyCell)
+		{
+			Position randomPosition = indexToPos(i);
+			if(randomPosition != snakeHeadPos)
+			{
+				return randomPosition;
+			}
+		}
+	}
+
+	UE_LOG(LogGrid, Error, TEXT("Empty cell dosn't exist!"));
+	return Position(-1, -1);
+}
+
 void Grid::freeCellByType(CellType cellType)
 {
 	TArray<uint32> cellIndices = m_indByType[cellType];

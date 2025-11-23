@@ -14,6 +14,8 @@ namespace SnakeGame
 		void setPosition(const Position& position);
 		Position getPosition() const;
 
+		void printDebug();
+
 	private:
 		Position m_position{Position::Zero};
 	};
