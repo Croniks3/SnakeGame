@@ -41,8 +41,8 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 	if(isDied() == true)
 	{
 		m_gameOver = true;
-		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()): ------------- Game over! ------------- "));
-		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()): ------------- SCORES: %i! ------------- "), m_scores);
+		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = update()): ------------- Game over! ------------- "));
+		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = update()): ------------- SCORES: %i! ------------- "), m_scores);
 		return;
 	}
 
@@ -58,8 +58,8 @@ void Game::updateGrid()
 	UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()):-------------------------- "));
 
 	m_grid->printDebug();
-	m_snake->printDebug();
 	m_food->printDebug();
+	m_snake->printDebug();
 }
 
 bool SnakeGame::Game::checkUpdatePossibility(float deltaSeconds)

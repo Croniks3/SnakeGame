@@ -15,6 +15,11 @@ Snake::Snake(const SnakeSettings& snakeSettings)
 	{
 		m_links.AddTail(Position{startPos.x - i, startPos.y});
 	}
+
+	// remember the position of the tail
+	Position lastLinkValue = m_links.GetTail()->GetValue();
+	Position preLastLinkValue = m_links.GetTail()->GetPrevNode()->GetValue();
+	m_previousTailPos = lastLinkValue + (lastLinkValue - preLastLinkValue);
 }
 
 void SnakeGame::Snake::printDebug()
@@ -38,19 +43,20 @@ void SnakeGame::Snake::printDebug()
 
 void Snake::move(const SnakeInput& input)
 {
-	if(lastInput.IsOpossite(input) == false)
+	// remember the position of the tail
+	m_previousTailPos = m_links.GetTail()->GetValue();
+
+	if(m_lastInput.IsOpossite(input) == false)
 	{
-		lastInput.x = input.x;
-		lastInput.y = input.y;
+		m_lastInput.x = input.x;
+		m_lastInput.y = input.y;
 	}
 
 	m_links.MoveTail(m_links.GetTail(), m_links.GetHead(), m_links.GetHead()->GetValue());
-	m_links.GetHead()->GetValue() += Position(lastInput.x, lastInput.y);
+	m_links.GetHead()->GetValue() += Position(m_lastInput.x, m_lastInput.y);
 }
 
-void SnakeGame::Snake::increase()
+void Snake::increase()
 {
-	Position lastLinkValue = m_links.GetTail()->GetValue();
-	Position preLastLinkValue = m_links.GetTail()->GetPrevNode()->GetValue();
-	m_links.AddTail(lastLinkValue + (lastLinkValue - preLastLinkValue));
+	m_links.AddTail(m_previousTailPos);
 }

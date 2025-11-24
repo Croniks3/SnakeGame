@@ -22,6 +22,7 @@ namespace SnakeGame
 		
 	private:
 		TSnakeList m_links;
-		SnakeInput lastInput{SnakeGame::SnakeInput::Default};
+		SnakeInput m_lastInput{SnakeGame::SnakeInput::Default};
+		Position m_previousTailPos{Position::Zero};
 	};
 }
