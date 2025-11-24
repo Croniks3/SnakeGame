@@ -1,6 +1,7 @@
 #include "Core/Snake.h"
+#include "LoggingConfig.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogSnake, All, All);
+DEFINE_LOG_CATEGORY_STATIC(LogSnake, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 using namespace SnakeGame;
 
@@ -22,9 +23,9 @@ Snake::Snake(const SnakeSettings& snakeSettings)
 	m_previousTailPos = lastLinkValue + (lastLinkValue - preLastLinkValue);
 }
 
+#if !UE_BUILD_SHIPPING
 void SnakeGame::Snake::printDebug()
 {
-#if !UE_BUILD_SHIPPING
 	int32 i = 0;
 	for(auto link : m_links)
 	{
@@ -38,8 +39,8 @@ void SnakeGame::Snake::printDebug()
 		}
 		++i;
 	}
-#endif
 }
+#endif
 
 void Snake::move(const SnakeInput& input)
 {

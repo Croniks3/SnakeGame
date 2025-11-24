@@ -1,9 +1,9 @@
 #include "World/SG_Grid.h"
 #include "Core/Grid.h"
-#include "Components/LineBatchComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "LoggingConfig.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogWorldGrid, All, All);
+DEFINE_LOG_CATEGORY_STATIC(LogWorldGrid, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 #define GET_VAR_NAME(var) #var
 
 ASG_Grid::ASG_Grid()
@@ -29,6 +29,7 @@ void ASG_Grid::SetModel(const TSharedPtr<SnakeGame::Grid>& grid, uint32 cellSize
 	if (grid.IsValid() == false)
 	{
 		UE_LOG(LogWorldGrid, Fatal, TEXT("Grid is null, game aborted!"));
+		return;
 	}
 
 	GridDimensions = grid.Get()->dimensions();

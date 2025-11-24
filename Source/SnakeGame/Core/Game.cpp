@@ -2,8 +2,9 @@
 #include "Core/Grid.h"
 #include "Core/Snake.h"
 #include "Core/Food.h"
+#include "LoggingConfig.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogGame, All, All);
+DEFINE_LOG_CATEGORY_STATIC(LogGame, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 //#pragma optimize("", off)
 
@@ -57,9 +58,11 @@ void Game::updateGrid()
 
 	UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()):-------------------------- "));
 
+#if !UE_BUILD_SHIPPING
 	m_grid->printDebug();
 	m_food->printDebug();
 	m_snake->printDebug();
+#endif
 }
 
 bool SnakeGame::Game::checkUpdatePossibility(float deltaSeconds)

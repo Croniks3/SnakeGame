@@ -2,7 +2,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "SG_WorldUtils.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogFoodActor, All, All);
 #define GET_VAR_NAME(var) #var
 
 ASG_Food::ASG_Food()

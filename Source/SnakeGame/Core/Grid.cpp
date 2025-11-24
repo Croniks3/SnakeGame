@@ -1,6 +1,7 @@
 #include "Core/Grid.h"
+#include "LoggingConfig.h"
 
-DEFINE_LOG_CATEGORY_STATIC(LogGrid, All, All);
+DEFINE_LOG_CATEGORY_STATIC(LogGrid, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 //#pragma optimize("", off)
 
@@ -136,9 +137,9 @@ void Grid::freeCellByType(CellType cellType)
 	cellIndices.Empty();
 }
 
+#if !UE_BUILD_SHIPPING
 void Grid::printDebug()
 {
-#if !UE_BUILD_SHIPPING
 	uint32 height = c_dimensions.height;
 	uint32 width = c_dimensions.width;
 
@@ -167,8 +168,8 @@ void Grid::printDebug()
 		}
 		UE_LOG(LogGrid, Display, TEXT("%s"), *line);
 	}
-#endif
 }
+#endif
 
 uint32 Grid::posToIndex(uint32 x, uint32 y) const
 {
