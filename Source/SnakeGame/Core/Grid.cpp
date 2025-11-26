@@ -69,32 +69,7 @@ bool Grid::hitTest(const Position& snakeHeadPos, CellType hitWith) const
 	return m_cells[index] == hitWith;
 }
 
-Position SnakeGame::Grid::getRandomEmptyPosition() const
-{
-	const auto gridSize = c_dimensions.height * c_dimensions.width;
-	const auto randIndex = FMath::RandRange(0, gridSize - 1);
-	
-	for(uint32 i = randIndex; i < gridSize; ++i)
-	{
-		if(m_cells[i] == CellType::EmptyCell)
-		{
-			return indexToPos(i);
-		}
-	}
-	
-	for(int32 i = 0; i < randIndex; ++i)
-	{
-		if(m_cells[i] == CellType::EmptyCell)
-		{
-			return indexToPos(i);
-		}
-	}
-
-	UE_LOG(LogGrid, Error, TEXT("Empty cell dosn't exist!"));
-	return Position(-1, -1);
-}
-
-Position SnakeGame::Grid::getRandomEmptyPosition(const Position& snakeHeadPos) const
+bool SnakeGame::Grid::getRandomEmptyPosition(const Position& snakeHeadPos, Position& outRandomPos) const
 {
 	const auto gridSize = c_dimensions.height * c_dimensions.width;
 	const auto randIndex = FMath::RandRange(0, gridSize - 1);
@@ -106,7 +81,8 @@ Position SnakeGame::Grid::getRandomEmptyPosition(const Position& snakeHeadPos) c
 			Position randomPosition = indexToPos(i);
 			if(randomPosition != snakeHeadPos)
 			{
-				return randomPosition;
+				outRandomPos = randomPosition;
+				return true;
 			}	
 		}
 	}
@@ -118,13 +94,13 @@ Position SnakeGame::Grid::getRandomEmptyPosition(const Position& snakeHeadPos) c
 			Position randomPosition = indexToPos(i);
 			if(randomPosition != snakeHeadPos)
 			{
-				return randomPosition;
+				outRandomPos = randomPosition;
+				return true;
 			}
 		}
 	}
-
-	UE_LOG(LogGrid, Error, TEXT("Empty cell dosn't exist!"));
-	return Position(-1, -1);
+	
+	return false;
 }
 
 void Grid::freeCellByType(CellType cellType)

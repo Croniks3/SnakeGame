@@ -44,7 +44,6 @@ void SnakeGame::Snake::printDebug()
 
 void Snake::move(const SnakeInput& input)
 {
-	// remember the position of the tail
 	m_previousTailPos = m_links.GetTail()->GetValue();
 
 	if(m_lastInput.IsOpossite(input) == false)
@@ -52,8 +51,9 @@ void Snake::move(const SnakeInput& input)
 		m_lastInput.x = input.x;
 		m_lastInput.y = input.y;
 	}
-
-	m_links.MoveTail(m_links.GetTail(), m_links.GetHead(), m_links.GetHead()->GetValue());
+	
+	m_links.GetTail()->GetValue() = m_links.GetHead()->GetValue();
+	m_links.MoveTailAfterHead();
 	m_links.GetHead()->GetValue() += Position(m_lastInput.x, m_lastInput.y);
 }
 

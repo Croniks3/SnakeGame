@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Containers/List.h"
+#include "SnakeGame/Containers/List.h"
 
 namespace SnakeGame
 {
@@ -21,7 +21,7 @@ namespace SnakeGame
 
 	struct Position
 	{
-		Position(uint32 inX, uint32 inY) : x(inX), y(inY) {}
+		Position(uint32 inX = 0, uint32 inY = 0) : x(inX), y(inY) {}
 		uint32 x;
 		uint32 y;
 
@@ -88,14 +88,6 @@ namespace SnakeGame
 		float gameSpeed{1.0f};
 	};
 	
-	using TSnakeListNode = TDoubleLinkedList<Position>::TDoubleLinkedListNode;
-	class TSnakeList : public TDoubleLinkedList<Position>
-	{
-	public:
-		void MoveTail(TSnakeListNode* Tail, TSnakeListNode* Head, const Position& HeadPos)
-		{
-			RemoveNode(Tail);
-			InsertNode(HeadPos, Head->GetNextNode());
-		}
-	};	
+	using TSnakeList = SnakeGame::TDoubleLinkedList<Position>;
+	using TSnakeListNode = SnakeGame::TDoubleLinkedList<Position>::TDoubleLinkedListNode;
 }

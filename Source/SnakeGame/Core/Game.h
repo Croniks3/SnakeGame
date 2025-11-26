@@ -36,6 +36,6 @@ namespace SnakeGame
 		bool checkUpdatePossibility(float deltaSeconds);
 		bool isDied() const;
 		bool takeFood() const;
-		void generateFood();
+		bool generateFood();
 	};
 }
