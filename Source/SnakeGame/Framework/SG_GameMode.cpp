@@ -26,6 +26,7 @@ void ASG_GameMode::StartPlay()
 	// Init core game
 	Game = MakeUnique<SnakeGame::Game>(CreateGameSettings());
 	check(Game.IsValid());
+	SubscribeOnGameEvents();
 
 	// Init world grid
 	const FTransform gridOrigin = FTransform::Identity;
@@ -160,6 +161,7 @@ void ASG_GameMode::OnResetGame(const FInputActionValue& Value)
 	{
 		Game.Reset(new SnakeGame::Game(CreateGameSettings()));
 		check(Game.IsValid());
+		SubscribeOnGameEvents();
 
 		GridVisual->SetModel(Game->getGrid(), CellSize);
 		SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
@@ -180,4 +182,9 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 	settings.gameSpeed = GameSpeed;
 
 	return settings;
+}
+
+void ASG_GameMode::SubscribeOnGameEvents()
+{
+
 }

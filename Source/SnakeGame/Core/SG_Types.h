@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "SnakeGame/Containers/List.h"
+#include "Templates/Function.h"
 
 namespace SnakeGame
 {
@@ -90,4 +91,13 @@ namespace SnakeGame
 	
 	using TSnakeList = SnakeGame::TDoubleLinkedList<Position>;
 	using TSnakeListNode = SnakeGame::TDoubleLinkedList<Position>::TDoubleLinkedListNode;
+
+	enum class GameplayEvent
+	{
+		GameOver = 0,
+		GameCompleted,
+		FoodTaken
+	};
+
+	using GameplayEventCallback = TFunction<void(GameplayEvent)>;
 }

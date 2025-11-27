@@ -40,6 +40,8 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 
 	if(m_foodTaken == true)
 	{
+		m_gameplayEventCallback(GameplayEvent::FoodTaken);
+
 		++m_scores;
 		m_snake->increase();
 		m_grid->update(m_snake->getBody(), CellType::SnakeCell);
@@ -47,6 +49,8 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 		const bool foodWasGenerated = generateFood();
 		if(foodWasGenerated == false)
 		{
+			m_gameplayEventCallback(GameplayEvent::GameCompleted);
+
 			m_gameOver = true;
 			UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = update()): ------------- GAME COMPLETE! ------------- "));
 			UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = update()): ------------- SCORES: %i! ------------- "), m_scores);
@@ -56,6 +60,8 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 
 	if(isDied() == true)
 	{
+		m_gameplayEventCallback(GameplayEvent::GameOver);
+
 		m_gameOver = true;
 		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = update()): ------------- GAME OVER! ------------- "));
 		UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = update()): ------------- SCORES: %i! ------------- "), m_scores);
@@ -80,7 +86,7 @@ void Game::updateGrid()
 #endif
 }
 
-bool SnakeGame::Game::checkUpdatePossibility(float deltaSeconds)
+bool Game::checkUpdatePossibility(float deltaSeconds)
 {
 	m_timeSinceLastUpdate += deltaSeconds;
 
@@ -99,12 +105,12 @@ bool Game::isDied() const
 		m_grid->hitTest(m_snake->getHeadPosition(), CellType::SnakeCell);
 }
 
-bool SnakeGame::Game::takeFood() const
+bool Game::takeFood() const
 {
 	return m_grid->hitTest(m_snake->getHeadPosition(), CellType::FoodCell);
 }
 
-bool SnakeGame::Game::generateFood()
+bool Game::generateFood()
 {
 	Position foodRandomPos;
 	if(m_grid->getRandomEmptyPosition(m_snake->getHeadPosition(), foodRandomPos) == true)
@@ -114,4 +120,9 @@ bool SnakeGame::Game::generateFood()
 	}
 	
 	return false;
+}
+
+void Game::subscribeOnGameplayEvent(GameplayEventCallback callback)
+{
+	m_gameplayEventCallback = callback;
 }

@@ -21,6 +21,10 @@ namespace SnakeGame
 
 		void update(float deltaSeconds, const SnakeInput& input);
 
+		uint32 score() const { return m_scores; }
+
+		void subscribeOnGameplayEvent(GameplayEventCallback callback);
+
 	private:
 		const Settings c_settings;
 		TSharedPtr<Grid> m_grid;
@@ -32,6 +36,8 @@ namespace SnakeGame
 		bool m_foodTaken{false};
 		uint32 m_scores{0};
 		
+		GameplayEventCallback m_gameplayEventCallback;
+
 		void updateGrid();
 		bool checkUpdatePossibility(float deltaSeconds);
 		bool isDied() const;
