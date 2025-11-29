@@ -6,6 +6,7 @@
 #include "SG_Food.generated.h"
 
 class UStaticMeshComponent;
+class UNiagaraSystem;
 
 UCLASS()
 class SNAKEGAME_API ASG_Food : public AActor
@@ -17,6 +18,7 @@ public:
 
 	void SetModel(const TSharedPtr<SnakeGame::Food>& Food, uint32 CellSize, const SnakeGame::Dimensions& gridDimensions);
 	void SetColor(const FLinearColor& Color);
+	void Explode();
 
 public:	
 	virtual void Tick(float DeltaTime) override;
@@ -27,6 +29,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* FoodMesh;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	TObjectPtr<UNiagaraSystem> ExplosionEffect;
 
 private:
 	TWeakPtr<SnakeGame::Food> Food;

@@ -1,7 +1,10 @@
 #include "World/SG_Food.h"
 #include "Components/StaticMeshComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "SG_WorldUtils.h"
+#include "LoggingConfig.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogSGFood, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 #define GET_VAR_NAME(var) #var
 
 ASG_Food::ASG_Food()
@@ -31,6 +34,23 @@ void ASG_Food::SetColor(const FLinearColor& Color)
 	if(auto* FoodMaterial = FoodMesh->CreateAndSetMaterialInstanceDynamic(0))
 	{
 		FoodMaterial->SetVectorParameterValue("Color", Color);
+	}
+}
+
+void ASG_Food::Explode()
+{
+	if(Food.IsValid())
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation
+		(
+			GetWorld(),
+			ExplosionEffect,
+			SnakeGame::WorldUtils::GridPositionToVector(Food.Pin()->getPosition(), CellSize, GridDimensions)
+		);
+	}
+	else
+	{
+		UE_LOG(LogSGFood, Warning, TEXT("Food actor is not valid!"));
 	}
 }
 

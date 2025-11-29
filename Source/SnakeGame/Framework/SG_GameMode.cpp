@@ -5,12 +5,15 @@
 #include "World/SG_Snake.h"
 #include "World/SG_Food.h"
 #include "Core/Grid.h"
+#include "LoggingConfig.h"
 #include "Framework/SG_GridPawn.h"
 #include "Engine/ExponentialHeightFog.h"
 #include "Components/ExponentialHeightFogComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
 #include <EnhancedInputComponent.h>
+
+DEFINE_LOG_CATEGORY_STATIC(LogSGGameMode, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 //#pragma optimize("", off)
 
@@ -186,5 +189,29 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 
 void ASG_GameMode::SubscribeOnGameEvents()
 {
+	Game->subscribeOnGameplayEvent([this](SnakeGame::GameplayEvent Event)
+		{
+			switch(Event)
+			{
+				case SnakeGame::GameplayEvent::GameOver:
+					UE_LOG(LogSGGameMode, Display, TEXT("------------- GAME OVER! ------------- "));
+					UE_LOG(LogSGGameMode, Display, TEXT("------------- SCORES: %i! ------------- "), Game->scores());
 
+					SnakeVisual->Explode();
+
+					break;
+				case SnakeGame::GameplayEvent::GameCompleted:
+					UE_LOG(LogSGGameMode, Display, TEXT("------------- GAME COMPLETE! ------------- "));
+					UE_LOG(LogSGGameMode, Display, TEXT("------------- SCORES: %i! ------------- "), Game->scores());
+					break;
+				case SnakeGame::GameplayEvent::FoodTaken:
+					UE_LOG(LogSGGameMode, Display, TEXT("------------- FOOD TAKEN! ------------- "));
+
+					FoodVisual->Explode();
+
+					break;
+				default:
+					break;
+			}
+		});
 }

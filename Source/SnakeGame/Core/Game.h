@@ -21,7 +21,7 @@ namespace SnakeGame
 
 		void update(float deltaSeconds, const SnakeInput& input);
 
-		uint32 score() const { return m_scores; }
+		uint32 scores() const { return m_scores; }
 
 		void subscribeOnGameplayEvent(GameplayEventCallback callback);
 

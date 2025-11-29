@@ -1,7 +1,10 @@
 #include "World/SG_Snake.h"
 #include "World/SG_SnakeLink.h"
+#include "NiagaraFunctionLibrary.h"
 #include "SG_WorldUtils.h"
+#include "LoggingConfig.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogSGSnake, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 ASG_Snake::ASG_Snake()
 {
@@ -46,6 +49,23 @@ void ASG_Snake::SetColors(const FLinearColor& HeadColor, const FLinearColor& Lin
 		const bool isHead = i == 0;
 		ASG_SnakeLink* SnakeLink = SnakeLinks[i];
 		SnakeLink->SetColor(isHead ? HeadColor : LinkColor);
+	}
+}
+
+void ASG_Snake::Explode()
+{
+	if(Snake.IsValid())
+	{
+		/*UNiagaraFunctionLibrary::SpawnSystemAtLocation
+		(
+			GetWorld(),
+			ExplosionEffect,
+			SnakeGame::WorldUtils::GridPositionToVector(Snake.Pin()->getPosition(), CellSize, GridDimensions)
+		);*/
+	}
+	else
+	{
+		UE_LOG(LogSGSnake, Warning, TEXT("Snake actor is not valid!"));
 	}
 }
 

@@ -7,6 +7,7 @@
 #include "SG_Snake.generated.h"
 
 class ASG_SnakeLink;
+class UNiagaraSystem;
 
 UCLASS()
 class SNAKEGAME_API ASG_Snake : public AActor
@@ -18,6 +19,7 @@ public:
 
 	void SetModel(const TSharedPtr<SnakeGame::Snake>& Snake, uint32 CellSize, const SnakeGame::Dimensions& gridDimensions);
 	void SetColors(const FLinearColor& HeadColor, const FLinearColor& LinkColor);
+	void Explode();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -25,6 +27,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<ASG_SnakeLink> SnakeLinkClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
+	TObjectPtr<UNiagaraSystem> ExplosionEffect;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
