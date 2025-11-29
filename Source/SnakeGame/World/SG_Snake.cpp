@@ -1,6 +1,5 @@
 #include "World/SG_Snake.h"
 #include "World/SG_SnakeLink.h"
-#include "NiagaraFunctionLibrary.h"
 #include "SG_WorldUtils.h"
 #include "LoggingConfig.h"
 
@@ -56,12 +55,12 @@ void ASG_Snake::Explode()
 {
 	if(Snake.IsValid())
 	{
-		/*UNiagaraFunctionLibrary::SpawnSystemAtLocation
-		(
-			GetWorld(),
-			ExplosionEffect,
-			SnakeGame::WorldUtils::GridPositionToVector(Snake.Pin()->getPosition(), CellSize, GridDimensions)
-		);*/
+		auto* LinkModelNode = Snake.Pin()->getLinks().GetHead();
+		for(int32 i = 0; i < SnakeLinks.Num(); ++i)
+		{
+			SnakeLinks[i]->Explode(LinkModelNode->GetValue(), CellSize, GridDimensions);
+			LinkModelNode = LinkModelNode->GetNextNode();
+		}
 	}
 	else
 	{

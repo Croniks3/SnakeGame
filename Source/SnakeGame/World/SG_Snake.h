@@ -7,7 +7,6 @@
 #include "SG_Snake.generated.h"
 
 class ASG_SnakeLink;
-class UNiagaraSystem;
 
 UCLASS()
 class SNAKEGAME_API ASG_Snake : public AActor
@@ -27,9 +26,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<ASG_SnakeLink> SnakeLinkClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
-	TObjectPtr<UNiagaraSystem> ExplosionEffect;
 
 public:	
 	virtual void Tick(float DeltaTime) override;
