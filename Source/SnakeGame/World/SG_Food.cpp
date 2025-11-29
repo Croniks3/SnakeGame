@@ -45,7 +45,7 @@ void ASG_Food::Explode()
 		(
 			GetWorld(),
 			ExplosionEffect,
-			SnakeGame::WorldUtils::GridPositionToVector(Food.Pin()->getPosition(), CellSize, GridDimensions)
+			GetActorLocation()
 		);
 	}
 	else

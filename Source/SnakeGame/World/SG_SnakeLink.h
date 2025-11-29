@@ -18,7 +18,7 @@ public:
 
 	void SetColor(const FLinearColor& Color);
 	void SetScale(uint32 CellSize);
-	void Explode(const SnakeGame::Position& LinkModelPos, const uint32& CellSize, const SnakeGame::Dimensions& GridDimensions);
+	void Explode();
 
 protected:
 	UPROPERTY(VisibleAnywhere)

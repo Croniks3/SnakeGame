@@ -34,7 +34,7 @@ void ASG_SnakeLink::SetScale(uint32 CellSize)
 	SnakeGame::WorldUtils::ScaleMeshByWorldSize(LinkMesh, FVector(CellSize));
 }
 
-void ASG_SnakeLink::Explode(const SnakeGame::Position& LinkModelPos, const uint32& CellSize, const SnakeGame::Dimensions& GridDimensions)
+void ASG_SnakeLink::Explode()
 {
 	if(LinkMesh)
 	{
@@ -42,8 +42,9 @@ void ASG_SnakeLink::Explode(const SnakeGame::Position& LinkModelPos, const uint3
 		(
 			GetWorld(),
 			ExplosionEffect,
-			SnakeGame::WorldUtils::GridPositionToVector(LinkModelPos, CellSize, GridDimensions)
+			GetActorLocation()
 		);
+		SetActorHiddenInGame(true);
 	}
 	else
 	{

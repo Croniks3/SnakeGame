@@ -55,11 +55,9 @@ void ASG_Snake::Explode()
 {
 	if(Snake.IsValid())
 	{
-		auto* LinkModelNode = Snake.Pin()->getLinks().GetHead();
 		for(int32 i = 0; i < SnakeLinks.Num(); ++i)
 		{
-			SnakeLinks[i]->Explode(LinkModelNode->GetValue(), CellSize, GridDimensions);
-			LinkModelNode = LinkModelNode->GetNextNode();
+			SnakeLinks[i]->Explode();
 		}
 	}
 	else

@@ -31,13 +31,6 @@ Game::Game(const Settings& settings) : c_settings(settings)
 
 void Game::update(float deltaSeconds, const SnakeInput& input)
 {
-	if(checkUpdatePossibility(deltaSeconds) == false || m_gameOver == true)
-	{
-		return;
-	}
-
-	m_snake->move(input);
-
 	if(m_foodTaken == true)
 	{
 		m_gameplayEventCallback(GameplayEvent::FoodTaken);
@@ -54,7 +47,16 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 			m_gameOver = true;
 			return;
 		}
+
+		m_foodTaken = false;
 	}
+
+	if(checkUpdatePossibility(deltaSeconds) == false || m_gameOver == true)
+	{
+		return;
+	}
+
+	m_snake->move(input);
 
 	if(isDied() == true)
 	{
