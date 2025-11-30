@@ -37,4 +37,6 @@ private:
 	TWeakPtr<SnakeGame::Food> Food;
 	uint32 CellSize;
 	SnakeGame::Dimensions GridDimensions;
+
+	FLinearColor FoodColor;
 };

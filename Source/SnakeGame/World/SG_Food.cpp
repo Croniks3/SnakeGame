@@ -1,6 +1,7 @@
 #include "World/SG_Food.h"
 #include "Components/StaticMeshComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "SG_WorldUtils.h"
 #include "LoggingConfig.h"
 
@@ -31,9 +32,10 @@ void ASG_Food::SetModel(const TSharedPtr<SnakeGame::Food>& InFood, uint32 InCell
 
 void ASG_Food::SetColor(const FLinearColor& Color)
 {
+	FoodColor = Color;
 	if(auto* FoodMaterial = FoodMesh->CreateAndSetMaterialInstanceDynamic(0))
 	{
-		FoodMaterial->SetVectorParameterValue("Color", Color);
+		FoodMaterial->SetVectorParameterValue("Color", FoodColor);
 	}
 }
 
@@ -41,12 +43,10 @@ void ASG_Food::Explode()
 {
 	if(Food.IsValid())
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation
-		(
-			GetWorld(),
-			ExplosionEffect,
-			GetActorLocation()
-		);
+		if(UNiagaraComponent* NG = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionEffect, GetActorLocation()))
+		{
+			NG->SetVariableLinearColor("ExplosionColor", FoodColor);
+		}
 	}
 	else
 	{

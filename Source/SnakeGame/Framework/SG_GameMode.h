@@ -25,13 +25,13 @@ public:
 	virtual void Tick(float deltaSeconds) override;
 
 protected:
-	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"), Category = "Settings")
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "5", ClampMax = "100"), Category = "Settings")
 	FUint32Point GridSize{10, 10};
 
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "10", ClampMax = "100"), Category = "Settings")
 	uint32 CellSize{10};
 
-	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "4", ClampMax = "10"), Category = "Settings")
+	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "3", ClampMax = "10"), Category = "Settings")
 	uint32 SnakeDefaultSize{5};
 
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "0.05", ClampMax = "2.0"), Category = "Settings")

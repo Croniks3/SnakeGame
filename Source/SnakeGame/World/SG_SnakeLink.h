@@ -29,4 +29,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "VFX")
 	TObjectPtr<UNiagaraSystem> ExplosionEffect;
+
+private:
+	FLinearColor SnakeLinkColor;
 };

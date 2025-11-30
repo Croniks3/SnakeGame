@@ -31,33 +31,34 @@ Game::Game(const Settings& settings) : c_settings(settings)
 
 void Game::update(float deltaSeconds, const SnakeInput& input)
 {
-	if(m_foodTaken == true)
+	if(takeFood() == true)
 	{
 		m_gameplayEventCallback(GameplayEvent::FoodTaken);
-
 		++m_scores;
 		m_snake->increase();
 		m_grid->update(m_snake->getBody(), CellType::SnakeCell);
 
 		const bool foodWasGenerated = generateFood();
-		if(foodWasGenerated == false)
+		if(foodWasGenerated == true)
+		{
+			m_grid->update(m_food->getPosition(), CellType::FoodCell);
+		}
+		else
 		{
 			m_gameplayEventCallback(GameplayEvent::GameCompleted);
 
 			m_gameOver = true;
 			return;
 		}
-
-		m_foodTaken = false;
 	}
 
 	if(checkUpdatePossibility(deltaSeconds) == false || m_gameOver == true)
 	{
 		return;
 	}
-
+	
 	m_snake->move(input);
-
+	
 	if(isDied() == true)
 	{
 		m_gameplayEventCallback(GameplayEvent::GameOver);
@@ -65,8 +66,7 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 		m_gameOver = true;
 		return;
 	}
-
-	m_foodTaken = takeFood();
+	
 	updateGrid();
 }
 
@@ -75,12 +75,12 @@ void Game::updateGrid()
 	m_grid->update(m_snake->getBody(), CellType::SnakeCell);
 	m_grid->update(m_food->getPosition(), CellType::FoodCell);
 
-	//UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()):-------------------------- "));
+	UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()):-------------------------- "));
 
 #if !UE_BUILD_SHIPPING
-	/*m_grid->printDebug();
+	m_grid->printDebug();
 	m_food->printDebug();
-	m_snake->printDebug();*/
+	m_snake->printDebug();
 #endif
 }
 

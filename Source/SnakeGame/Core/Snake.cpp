@@ -8,7 +8,7 @@ using namespace SnakeGame;
 
 Snake::Snake(const SnakeSettings& snakeSettings)
 {
-	checkf(snakeSettings.defaultSize >= 4, TEXT("Snake length is to small: %i"), snakeSettings.defaultSize);
+	checkf(snakeSettings.defaultSize >= 2, TEXT("Snake length is to small: %i"), snakeSettings.defaultSize);
 
 	// Add snake links horizontaly to the lef [ ---* ]
 	const auto startPos = snakeSettings.startPosition;
