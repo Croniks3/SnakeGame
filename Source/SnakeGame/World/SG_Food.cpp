@@ -28,6 +28,7 @@ void ASG_Food::SetModel(const TSharedPtr<SnakeGame::Food>& InFood, uint32 InCell
 	GridDimensions = InGridDimensions;
 
 	SnakeGame::WorldUtils::ScaleMeshByWorldSize(FoodMesh, FVector(CellSize));
+	SetActorHiddenInGame(false);
 }
 
 void ASG_Food::SetColor(const FLinearColor& Color)
@@ -52,6 +53,11 @@ void ASG_Food::Explode()
 	{
 		UE_LOG(LogSGFood, Warning, TEXT("Food actor is not valid!"));
 	}
+}
+
+void ASG_Food::Hide()
+{
+	SetActorHiddenInGame(true);
 }
 
 void ASG_Food::Tick(float DeltaTime)

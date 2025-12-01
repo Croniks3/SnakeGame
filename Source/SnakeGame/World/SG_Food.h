@@ -19,6 +19,7 @@ public:
 	void SetModel(const TSharedPtr<SnakeGame::Food>& Food, uint32 CellSize, const SnakeGame::Dimensions& gridDimensions);
 	void SetColor(const FLinearColor& Color);
 	void Explode();
+	void Hide();
 
 public:	
 	virtual void Tick(float DeltaTime) override;
