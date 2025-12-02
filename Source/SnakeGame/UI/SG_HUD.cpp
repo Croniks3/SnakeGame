@@ -8,10 +8,16 @@
 void ASG_HUD::BeginPlay()
 {
 	Super::BeginPlay();
+
 	GameplayWidget = CreateWidget<USG_GameplayWidget>(GetWorld(), GameplayWidgetClass);
 	check(GameplayWidget);
-
 	GameplayWidget->AddToViewport();
+	GameplayWidget->SetVisibility(ESlateVisibility::Visible);
+
+	GameOverWidget = CreateWidget<USG_GameOverWidget>(GetWorld(), GameOverWidgetClass);
+	check(GameOverWidget);
+	GameOverWidget->AddToViewport();
+	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void ASG_HUD::Tick(float deltaSeconds)
@@ -31,16 +37,24 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 		return;
 	}
 
+	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
+
 	Game = InGame;
 	GameplayWidget->UpdateScores(InGame->scores());
 	
 	InGame->subscribeOnGameplayEvent(SnakeGame::FGameplayEvent::FDelegate::CreateLambda
-	([&](SnakeGame::GameplayEventType Event)
+	([this](SnakeGame::GameplayEventType Event)
 	{
 		switch(Event)
 		{
 			case SnakeGame::GameplayEventType::FoodTaken:
-				GameplayWidget->UpdateScores(InGame->scores());
+				if(Game.IsValid())
+				{
+					GameplayWidget->UpdateScores(Game.Pin()->scores());
+				}
+				break;
+			case SnakeGame::GameplayEventType::GameOver:
+				GameOverWidget->SetVisibility(ESlateVisibility::Visible);
 				break;
 			default:
 				break;
