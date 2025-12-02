@@ -14,6 +14,16 @@ void ASG_HUD::BeginPlay()
 	GameplayWidget->AddToViewport();
 }
 
+void ASG_HUD::Tick(float deltaSeconds)
+{
+	Super::Tick(deltaSeconds);
+
+	if(Game.IsValid() == true && Game.Pin()->isGameOver() == false)
+	{
+		GameplayWidget->SetGameTime(Game.Pin()->gameTime());
+	}
+}
+
 void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 {
 	if(!InGame)
@@ -22,29 +32,18 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 	}
 
 	Game = InGame;
-
-	UpdateScores(Game->scores());
+	GameplayWidget->UpdateScores(InGame->scores());
 	
 	InGame->subscribeOnGameplayEvent(SnakeGame::FGameplayEvent::FDelegate::CreateLambda
-	([this](SnakeGame::GameplayEventType Event)
+	([&](SnakeGame::GameplayEventType Event)
 	{
 		switch(Event)
 		{
 			case SnakeGame::GameplayEventType::FoodTaken:
-				UpdateScores(Game->scores());
+				GameplayWidget->UpdateScores(InGame->scores());
 				break;
 			default:
 				break;
 		}
 	}));
-}
-
-void ASG_HUD::SetGameTime(float seconds)
-{
-	GameplayWidget->SetGameTime(seconds);
-}
-
-void ASG_HUD::UpdateScores(uint32 scores)
-{
-	GameplayWidget->UpdateScores(scores);
 }

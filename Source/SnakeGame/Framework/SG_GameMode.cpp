@@ -88,7 +88,6 @@ void ASG_GameMode::Tick(float deltaSeconds)
 	if(Game.IsValid() == true && Game->isGameOver() == false)
 	{
 		Game->update(deltaSeconds, Input);
-		HUD->SetGameTime(Game->gameTime());
 	}
 }
 
