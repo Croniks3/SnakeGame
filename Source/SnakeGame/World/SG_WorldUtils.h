@@ -27,5 +27,21 @@ namespace SnakeGame
 				Mesh->SetRelativeScale3D(WorldSize / BoxSize);
 			}
 		}
+
+		static FText FormatSeconds(float inSeconds)
+		{
+			const int32 InTotalSeconds = FMath::RoundToInt(inSeconds);
+			//const int32 hours = inTotalSeconds / 3600;
+			const int32 Minutes = InTotalSeconds / 60;
+			const int32 Seconds = InTotalSeconds % 60;
+
+			const FString FormattedTime = FString::Printf(TEXT("%02i:%02i"), Minutes, Seconds);
+			return FText::FromString(FormattedTime);
+		}
+
+		static FText FormatScores(uint32 inScores)
+		{
+			return FText::FromString(FString::Printf(TEXT("%03i"), inScores));
+		}
 	};
 }

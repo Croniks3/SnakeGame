@@ -31,14 +31,17 @@ Game::Game(const Settings& settings) : c_settings(settings)
 
 void Game::update(float deltaSeconds, const SnakeInput& input)
 {
+	m_gameTime += deltaSeconds;
+
 	if(takeFood() == true)
 	{
-		if(m_gameplayEventCallback)
+		++m_scores;
+
+		if(m_gameplayEvent.IsBound())
 		{
-			m_gameplayEventCallback(GameplayEvent::FoodTaken);
+			m_gameplayEvent.Broadcast(GameplayEventType::FoodTaken);
 		}
 		
-		++m_scores;
 		m_snake->increase();
 		m_grid->update(m_snake->getBody(), CellType::SnakeCell);
 
@@ -49,9 +52,9 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 		}
 		else
 		{
-			if(m_gameplayEventCallback)
+			if(m_gameplayEvent.IsBound())
 			{
-				m_gameplayEventCallback(GameplayEvent::GameCompleted);
+				m_gameplayEvent.Broadcast(GameplayEventType::GameCompleted);
 			}
 
 			m_gameOver = true;
@@ -68,9 +71,9 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 	
 	if(isDied() == true)
 	{
-		if(m_gameplayEventCallback)
+		if(m_gameplayEvent.IsBound())
 		{
-			m_gameplayEventCallback(GameplayEvent::GameOver);
+			m_gameplayEvent.Broadcast(GameplayEventType::GameOver);
 		}
 		
 		m_gameOver = true;
@@ -130,7 +133,7 @@ bool Game::generateFood()
 	return false;
 }
 
-void Game::subscribeOnGameplayEvent(GameplayEventCallback callback)
+void Game::subscribeOnGameplayEvent(FGameplayEvent::FDelegate&& Callback)
 {
-	m_gameplayEventCallback = callback;
+	m_gameplayEvent.Add(MoveTemp(Callback));
 }

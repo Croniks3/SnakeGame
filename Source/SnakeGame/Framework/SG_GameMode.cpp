@@ -4,6 +4,7 @@
 #include "World/SG_Grid.h"
 #include "World/SG_Snake.h"
 #include "World/SG_Food.h"
+#include "UI/SG_HUD.h"
 #include "Core/Grid.h"
 #include "LoggingConfig.h"
 #include "Framework/SG_GridPawn.h"
@@ -27,7 +28,7 @@ void ASG_GameMode::StartPlay()
 	Super::StartPlay();
 
 	// Init core game
-	Game = MakeUnique<SnakeGame::Game>(CreateGameSettings());
+	Game = MakeShared<SnakeGame::Game>(CreateGameSettings());
 	check(Game.IsValid());
 	SubscribeOnGameEvents();
 
@@ -74,15 +75,20 @@ void ASG_GameMode::StartPlay()
 	UpdateColors();
 
 	SetupInput();
+
+	HUD = Cast<ASG_HUD>(pc->GetHUD());
+	check(HUD);
+	HUD->SetModel(Game);
 }
 
 void ASG_GameMode::Tick(float deltaSeconds)
 {
 	Super::Tick(deltaSeconds);
 
-	if(Game.IsValid() == true)
+	if(Game.IsValid() == true && Game->isGameOver() == false)
 	{
 		Game->update(deltaSeconds, Input);
+		HUD->SetGameTime(Game->gameTime());
 	}
 }
 
@@ -162,13 +168,14 @@ void ASG_GameMode::OnResetGame(const FInputActionValue& Value)
 {
 	if(Value.Get<bool>() == true)
 	{
-		Game.Reset(new SnakeGame::Game(CreateGameSettings()));
+		Game = MakeShared<SnakeGame::Game>(CreateGameSettings());
 		check(Game.IsValid());
 		SubscribeOnGameEvents();
 
 		GridVisual->SetModel(Game->getGrid(), CellSize);
 		SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
 		FoodVisual->SetModel(Game->getFood(), CellSize, Game->getGrid()->dimensions());
+		HUD->SetModel(Game);
 		Input = SnakeGame::SnakeInput::Default;
 		NextColor();
 	}
@@ -189,11 +196,12 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 
 void ASG_GameMode::SubscribeOnGameEvents()
 {
-	Game->subscribeOnGameplayEvent([this](SnakeGame::GameplayEvent Event)
+	Game->subscribeOnGameplayEvent(SnakeGame::FGameplayEvent::FDelegate::CreateLambda
+		([this](SnakeGame::GameplayEventType Event)
 		{
 			switch(Event)
 			{
-				case SnakeGame::GameplayEvent::GameOver:
+				case SnakeGame::GameplayEventType::GameOver:
 					UE_LOG(LogSGGameMode, Display, TEXT("------------- GAME OVER! ------------- "));
 					UE_LOG(LogSGGameMode, Display, TEXT("------------- SCORES: %i! ------------- "), Game->scores());
 
@@ -201,14 +209,14 @@ void ASG_GameMode::SubscribeOnGameEvents()
 					FoodVisual->Hide();
 
 					break;
-				case SnakeGame::GameplayEvent::GameCompleted:
+				case SnakeGame::GameplayEventType::GameCompleted:
 					UE_LOG(LogSGGameMode, Display, TEXT("------------- GAME COMPLETE! ------------- "));
 					UE_LOG(LogSGGameMode, Display, TEXT("------------- SCORES: %i! ------------- "), Game->scores());
 
 					FoodVisual->Hide();
 
 					break;
-				case SnakeGame::GameplayEvent::FoodTaken:
+				case SnakeGame::GameplayEventType::FoodTaken:
 					UE_LOG(LogSGGameMode, Display, TEXT("------------- FOOD TAKEN! ------------- "));
 
 					FoodVisual->Explode();
@@ -217,5 +225,5 @@ void ASG_GameMode::SubscribeOnGameEvents()
 				default:
 					break;
 			}
-		});
+		}));
 }

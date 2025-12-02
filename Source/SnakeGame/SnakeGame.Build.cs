@@ -8,7 +8,16 @@ public class SnakeGame : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara" });
+		PublicDependencyModuleNames.AddRange(new string[] 
+		{ 
+			"Core", 
+			"CoreUObject", 
+			"Engine", 
+			"UMG", 
+			"InputCore", 
+			"EnhancedInput", 
+			"Niagara" 
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

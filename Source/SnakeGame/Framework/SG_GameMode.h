@@ -10,6 +10,7 @@
 class ASG_Grid;
 class ASG_Snake;
 class ASG_Food;
+class ASG_HUD;
 class AExponentialHeightFog;
 class UInputAction;
 class UInputMappingContext;
@@ -63,22 +64,25 @@ protected:
 
 private:
 	UPROPERTY()
-	ASG_Grid* GridVisual;
+	TObjectPtr<ASG_Grid> GridVisual;
 
 	UPROPERTY()
-	ASG_Snake* SnakeVisual;
+	TObjectPtr<ASG_Snake> SnakeVisual;
 
 	UPROPERTY()
-	ASG_Food* FoodVisual;
+	TObjectPtr<ASG_Food> FoodVisual;
 
 	UPROPERTY()
-	AExponentialHeightFog* Fog;
+	TObjectPtr<ASG_HUD> HUD;
+
+	UPROPERTY()
+	TObjectPtr<AExponentialHeightFog> Fog;
 
 	UFUNCTION(Exec, Category = "Console command")
 	void NextColor();
 
 private:
-	TUniquePtr<SnakeGame::Game> Game;
+	TSharedPtr<SnakeGame::Game> Game;
 	uint32 ColorTableIndex{0};
 	SnakeGame::SnakeInput Input{SnakeGame::SnakeInput::Default};
 

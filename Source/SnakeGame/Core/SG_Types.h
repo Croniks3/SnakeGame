@@ -92,12 +92,12 @@ namespace SnakeGame
 	using TSnakeList = SnakeGame::TDoubleLinkedList<Position>;
 	using TSnakeListNode = SnakeGame::TDoubleLinkedList<Position>::TDoubleLinkedListNode;
 
-	enum class GameplayEvent
+	enum class GameplayEventType
 	{
 		GameOver = 0,
 		GameCompleted,
 		FoodTaken
 	};
 
-	using GameplayEventCallback = TFunction<void(GameplayEvent)>;
+	DECLARE_MULTICAST_DELEGATE_OneParam(FGameplayEvent, GameplayEventType);
 }

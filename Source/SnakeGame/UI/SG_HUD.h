@@ -4,10 +4,47 @@
 #include "GameFramework/HUD.h"
 #include "SG_HUD.generated.h"
 
+class USG_GameplayWidget;
+class USG_GameOverWidget;
+class USG_StartGameWidget;
+
+namespace SnakeGame
+{
+	class Game;
+}
+
 
 UCLASS()
 class SNAKEGAME_API ASG_HUD : public AHUD
 {
 	GENERATED_BODY()
 	
+public:
+	void SetModel(const TSharedPtr<SnakeGame::Game>& Game);
+	void SetGameTime(float seconds);
+	void UpdateScores(uint32 scores);
+
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<USG_GameplayWidget> GameplayWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<USG_GameOverWidget> GameOverWidgetClass;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<USG_StartGameWidget> StartGameWidgetClass;
+
+	virtual void BeginPlay() override;
+
+private:
+	UPROPERTY()
+	TObjectPtr<USG_GameplayWidget> GameplayWidget;
+
+	UPROPERTY()
+	TObjectPtr<USG_GameOverWidget> GameOverWidget;
+
+	UPROPERTY()
+	TObjectPtr<USG_StartGameWidget> StartGameWidget;
+
+	TSharedPtr<SnakeGame::Game> Game;
 };
