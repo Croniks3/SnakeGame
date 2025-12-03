@@ -12,6 +12,7 @@
 #include "Components/ExponentialHeightFogComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include <EnhancedInputComponent.h>
 
 DEFINE_LOG_CATEGORY_STATIC(LogSGGameMode, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
@@ -202,6 +203,24 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 	return settings;
 }
 
+void ASG_GameMode::ExitGame()
+{
+	UWorld* World = GetWorld();
+	if(!World)
+	{
+		return;
+	}
+
+	auto* PC = World->GetFirstPlayerController();
+		
+	UKismetSystemLibrary::QuitGame(
+		World,
+		PC,
+		EQuitPreference::Quit,  
+		false                   
+	);
+}
+
 void ASG_GameMode::SubscribeOnEvents()
 {
 	Game->subscribeOnGameplayEvent(SnakeGame::FGameplayEvent::FDelegate::CreateLambda
@@ -238,5 +257,10 @@ void ASG_GameMode::SubscribeOnEvents()
 	HUD->OnRestartClicked.AddLambda([this]()
 	{
 		ResetGameInternal();
+	});
+
+	HUD->OnExitClicked.AddLambda([this]()
+	{
+		ExitGame();
 	});
 }

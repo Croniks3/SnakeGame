@@ -70,7 +70,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 								GameOverWidget->SetTotalGameTimeAndScores(Game.Pin()->gameTime(), Game.Pin()->scores());
 							}
 						},
-						1.5f,
+						1.0f,
 						false
 					);
 				break;

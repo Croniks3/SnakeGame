@@ -98,4 +98,6 @@ private:
 
 	void SubscribeOnEvents();
 	void ResetGameInternal();
+
+	void ExitGame();
 };
