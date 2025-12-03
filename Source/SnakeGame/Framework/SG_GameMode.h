@@ -96,5 +96,6 @@ private:
 
 	SnakeGame::Settings CreateGameSettings() const;
 
-	void SubscribeOnGameEvents();
+	void SubscribeOnEvents();
+	void ResetGameInternal();
 };

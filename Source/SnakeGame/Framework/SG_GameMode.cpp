@@ -30,8 +30,7 @@ void ASG_GameMode::StartPlay()
 	// Init core game
 	Game = MakeShared<SnakeGame::Game>(CreateGameSettings());
 	check(Game.IsValid());
-	SubscribeOnGameEvents();
-
+	
 	// Init world grid
 	const FTransform gridOrigin = FTransform::Identity;
 	check(GetWorld());
@@ -74,11 +73,16 @@ void ASG_GameMode::StartPlay()
 	ColorTableIndex = FMath::RandRange(0, RowsCount - 1);
 	UpdateColors();
 
+	// Input
 	SetupInput();
 
+	// Set HUD
 	HUD = Cast<ASG_HUD>(pc->GetHUD());
 	check(HUD);
 	HUD->SetModel(Game);
+
+	// Events
+	SubscribeOnEvents();
 }
 
 void ASG_GameMode::Tick(float deltaSeconds)
@@ -167,17 +171,22 @@ void ASG_GameMode::OnResetGame(const FInputActionValue& Value)
 {
 	if(Value.Get<bool>() == true)
 	{
-		Game = MakeShared<SnakeGame::Game>(CreateGameSettings());
-		check(Game.IsValid());
-		SubscribeOnGameEvents();
-
-		GridVisual->SetModel(Game->getGrid(), CellSize);
-		SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
-		FoodVisual->SetModel(Game->getFood(), CellSize, Game->getGrid()->dimensions());
-		HUD->SetModel(Game);
-		Input = SnakeGame::SnakeInput::Default;
-		NextColor();
+		ResetGameInternal();
 	}
+}
+
+void ASG_GameMode::ResetGameInternal()
+{
+	Game = MakeShared<SnakeGame::Game>(CreateGameSettings());
+	check(Game.IsValid());
+	SubscribeOnEvents();
+
+	GridVisual->SetModel(Game->getGrid(), CellSize);
+	SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
+	FoodVisual->SetModel(Game->getFood(), CellSize, Game->getGrid()->dimensions());
+	HUD->SetModel(Game);
+	Input = SnakeGame::SnakeInput::Default;
+	NextColor();
 }
 
 SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
@@ -193,7 +202,7 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 	return settings;
 }
 
-void ASG_GameMode::SubscribeOnGameEvents()
+void ASG_GameMode::SubscribeOnEvents()
 {
 	Game->subscribeOnGameplayEvent(SnakeGame::FGameplayEvent::FDelegate::CreateLambda
 		([this](SnakeGame::GameplayEventType Event)
@@ -225,4 +234,9 @@ void ASG_GameMode::SubscribeOnGameEvents()
 					break;
 			}
 		}));
+
+	HUD->OnRestartClicked.AddLambda([this]()
+	{
+		ResetGameInternal();
+	});
 }

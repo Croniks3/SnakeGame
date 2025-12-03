@@ -4,6 +4,9 @@
 #include "GameFramework/HUD.h"
 #include "SG_HUD.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnRestartClicked);
+DECLARE_MULTICAST_DELEGATE(FOnExitClicked);
+
 class USG_GameplayWidget;
 class USG_GameOverWidget;
 class USG_StartGameWidget;
@@ -20,6 +23,9 @@ class SNAKEGAME_API ASG_HUD : public AHUD
 	GENERATED_BODY()
 	
 public:
+	FOnRestartClicked OnRestartClicked;
+	FOnExitClicked OnExitClicked;
+
 	void SetModel(const TSharedPtr<SnakeGame::Game>& Game);
 
 protected:
@@ -46,4 +52,9 @@ private:
 	TObjectPtr<USG_StartGameWidget> StartGameWidget;
 
 	TWeakPtr<SnakeGame::Game> Game;
+
+	FTimerHandle Timer;
+
+	void HandleRestartClick();
+	void HandleExitClick();
 };

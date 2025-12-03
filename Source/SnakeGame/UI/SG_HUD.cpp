@@ -18,6 +18,9 @@ void ASG_HUD::BeginPlay()
 	check(GameOverWidget);
 	GameOverWidget->AddToViewport();
 	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+	GameOverWidget->OnRestartClicked.AddUObject(this, &ThisClass::HandleRestartClick);
+	GameOverWidget->OnExitClicked.AddUObject(this, &ThisClass::HandleExitClick);
 }
 
 void ASG_HUD::Tick(float deltaSeconds)
@@ -30,6 +33,7 @@ void ASG_HUD::Tick(float deltaSeconds)
 	}
 }
 
+
 void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 {
 	if(!InGame)
@@ -37,6 +41,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 		return;
 	}
 
+	GameplayWidget->SetVisibility(ESlateVisibility::Visible);
 	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 	Game = InGame;
@@ -54,10 +59,33 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 				}
 				break;
 			case SnakeGame::GameplayEventType::GameOver:
-				GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+				GetWorldTimerManager().SetTimer(
+						Timer,
+						[this]()
+						{
+							GameplayWidget->SetVisibility(ESlateVisibility::Collapsed);
+							GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+							if(Game.IsValid())
+							{
+								GameOverWidget->SetTotalGameTimeAndScores(Game.Pin()->gameTime(), Game.Pin()->scores());
+							}
+						},
+						1.5f,
+						false
+					);
 				break;
 			default:
 				break;
 		}
 	}));
+}
+
+void ASG_HUD::HandleRestartClick()
+{
+	OnRestartClicked.Broadcast();
+}
+
+void ASG_HUD::HandleExitClick()
+{
+	OnExitClicked.Broadcast();
 }
