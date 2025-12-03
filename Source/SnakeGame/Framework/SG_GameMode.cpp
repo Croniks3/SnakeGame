@@ -83,7 +83,8 @@ void ASG_GameMode::StartPlay()
 	HUD->SetModel(Game);
 
 	// Events
-	SubscribeOnEvents();
+	SubscribeOnGameEvents();
+	SubscribeOnHUDEvents();
 }
 
 void ASG_GameMode::Tick(float deltaSeconds)
@@ -180,7 +181,7 @@ void ASG_GameMode::ResetGameInternal()
 {
 	Game = MakeShared<SnakeGame::Game>(CreateGameSettings());
 	check(Game.IsValid());
-	SubscribeOnEvents();
+	SubscribeOnGameEvents();
 
 	GridVisual->SetModel(Game->getGrid(), CellSize);
 	SnakeVisual->SetModel(Game->getSnake(), CellSize, Game->getGrid()->dimensions());
@@ -221,7 +222,7 @@ void ASG_GameMode::ExitGame()
 	);
 }
 
-void ASG_GameMode::SubscribeOnEvents()
+void ASG_GameMode::SubscribeOnGameEvents()
 {
 	Game->subscribeOnGameplayEvent(SnakeGame::FGameplayEvent::FDelegate::CreateLambda
 		([this](SnakeGame::GameplayEventType Event)
@@ -253,7 +254,10 @@ void ASG_GameMode::SubscribeOnEvents()
 					break;
 			}
 		}));
+}
 
+void ASG_GameMode::SubscribeOnHUDEvents()
+{
 	HUD->OnRestartClicked.AddLambda([this]()
 	{
 		ResetGameInternal();
