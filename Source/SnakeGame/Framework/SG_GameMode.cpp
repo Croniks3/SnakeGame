@@ -85,6 +85,18 @@ void ASG_GameMode::StartPlay()
 	// Events
 	SubscribeOnGameEvents();
 	SubscribeOnHUDEvents();
+
+	// Mouse
+	pc->bShowMouseCursor = true;
+	pc->bEnableClickEvents = true;
+	pc->bEnableMouseOverEvents = true;
+
+	// Режим ввода: Game + UI
+	FInputModeGameAndUI InputMode;
+	InputMode.SetHideCursorDuringCapture(false);                          
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);  
+
+	pc->SetInputMode(InputMode);
 }
 
 void ASG_GameMode::Tick(float deltaSeconds)

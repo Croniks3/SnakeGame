@@ -11,16 +11,23 @@ void ASG_HUD::BeginPlay()
 
 	GameplayWidget = CreateWidget<USG_GameplayWidget>(GetWorld(), GameplayWidgetClass);
 	check(GameplayWidget);
-	GameplayWidget->AddToViewport();
-	GameplayWidget->SetVisibility(ESlateVisibility::Visible);
+	GameWidgets.Add(EMatchState::GameInProgress, GameplayWidget);
 
 	GameOverWidget = CreateWidget<USG_GameOverWidget>(GetWorld(), GameOverWidgetClass);
 	check(GameOverWidget);
-	GameOverWidget->AddToViewport();
-	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
+	GameWidgets.Add(EMatchState::GameOver, GameOverWidget);
 
 	GameOverWidget->OnRestartClicked.AddUObject(this, &ThisClass::HandleRestartClick);
 	GameOverWidget->OnExitClicked.AddUObject(this, &ThisClass::HandleExitClick);
+
+	for(auto& [EMatchState, GameWidget] : GameWidgets)
+	{
+		if(GameWidget)
+		{
+			GameWidget->AddToViewport();
+			GameWidget->SetVisibility(ESlateVisibility::Collapsed);
+		}
+	}
 }
 
 void ASG_HUD::Tick(float deltaSeconds)
@@ -41,8 +48,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 		return;
 	}
 
-	GameplayWidget->SetVisibility(ESlateVisibility::Visible);
-	GameOverWidget->SetVisibility(ESlateVisibility::Collapsed);
+	SetMatchState(EMatchState::GameInProgress);
 
 	Game = InGame;
 	GameplayWidget->UpdateScores(InGame->scores());
@@ -63,8 +69,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 						Timer,
 						[this]()
 						{
-							GameplayWidget->SetVisibility(ESlateVisibility::Collapsed);
-							GameOverWidget->SetVisibility(ESlateVisibility::Visible);
+							/*SetMatchState(EMatchState::GameOver);*/
 							if(Game.IsValid())
 							{
 								GameOverWidget->SetTotalGameTimeAndScores(Game.Pin()->gameTime(), Game.Pin()->scores());
@@ -88,4 +93,18 @@ void ASG_HUD::HandleRestartClick()
 void ASG_HUD::HandleExitClick()
 {
 	OnExitClicked.Broadcast();
+}
+
+void ASG_HUD::SetMatchState(EMatchState MatchState)
+{
+	if(CurrentWidget)
+	{
+		CurrentWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
+
+	if(GameWidgets.Contains(MatchState))
+	{
+		CurrentWidget = GameWidgets[MatchState];
+		CurrentWidget->SetVisibility(ESlateVisibility::Visible);
+	}
 }

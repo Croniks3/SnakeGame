@@ -7,6 +7,15 @@
 DECLARE_MULTICAST_DELEGATE(FOnRestartClicked);
 DECLARE_MULTICAST_DELEGATE(FOnExitClicked);
 
+UENUM(BlueprintType)
+enum class EMatchState : uint8
+{
+	StartGame        UMETA(DisplayName = "StartGame"),
+	GameInProgress   UMETA(DisplayName = "GameInProgress"),
+	GameOver         UMETA(DisplayName = "GameOver"),
+	GameCompleted    UMETA(DisplayName = "GameCompleted")
+};
+
 class USG_GameplayWidget;
 class USG_GameOverWidget;
 class USG_StartGameWidget;
@@ -51,10 +60,18 @@ private:
 	UPROPERTY()
 	TObjectPtr<USG_StartGameWidget> StartGameWidget;
 
+	UPROPERTY()
+	TMap<EMatchState, TObjectPtr<UUserWidget>> GameWidgets;
+
+	UPROPERTY()
+	TObjectPtr<UUserWidget> CurrentWidget;
+
 	TWeakPtr<SnakeGame::Game> Game;
 
 	FTimerHandle Timer;
 
 	void HandleRestartClick();
 	void HandleExitClick();
+
+	void SetMatchState(EMatchState MatchState);
 };
