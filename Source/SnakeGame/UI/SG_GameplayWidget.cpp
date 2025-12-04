@@ -1,7 +1,13 @@
 #include "UI/SG_GameplayWidget.h"
+#include "UI/SG_Joystick.h"
 #include "Components/TextBlock.h"
 #include "World/SG_WorldUtils.h"
 
+
+void USG_GameplayWidget::NativeConstruct()
+{
+	JoystickWidget->InputUpdateEvent.BindUObject(this, &ThisClass::OnInputUpdated);
+}
 
 void USG_GameplayWidget::SetGameTime(float seconds)
 {
@@ -17,4 +23,9 @@ void USG_GameplayWidget::UpdateScores(uint32 scores)
 	{
 		ScoresText->SetText(SnakeGame::WorldUtils::FormatScores(scores));
 	}
+}
+
+void USG_GameplayWidget::OnInputUpdated(FVector2D InputVector)
+{
+	InputUpdateEvent.ExecuteIfBound(InputVector);
 }

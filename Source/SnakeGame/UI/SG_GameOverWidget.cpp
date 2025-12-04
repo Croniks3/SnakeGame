@@ -34,10 +34,10 @@ void USG_GameOverWidget::SetTotalGameTimeAndScores(float Seconds, uint32 Scores)
 
 void USG_GameOverWidget::HandleInternalRestartClick()
 {
-	OnRestartClicked.Broadcast();
+	OnRestartClicked.ExecuteIfBound();
 }
 
 void USG_GameOverWidget::HandleInternalExitClick()
 {
-	OnExitClicked.Broadcast();
+	OnExitClicked.ExecuteIfBound();
 }

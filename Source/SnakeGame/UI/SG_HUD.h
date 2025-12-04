@@ -4,11 +4,12 @@
 #include "GameFramework/HUD.h"
 #include "SG_HUD.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnRestartClicked);
-DECLARE_MULTICAST_DELEGATE(FOnExitClicked);
+DECLARE_DELEGATE(FOnRestartClicked);
+DECLARE_DELEGATE(FOnExitClicked);
+DECLARE_DELEGATE_OneParam(FOnInputUpdated, FVector2D);
 
 UENUM(BlueprintType)
-enum class EMatchState : uint8
+enum class EGameState : uint8
 {
 	StartGame        UMETA(DisplayName = "StartGame"),
 	GameInProgress   UMETA(DisplayName = "GameInProgress"),
@@ -34,6 +35,7 @@ class SNAKEGAME_API ASG_HUD : public AHUD
 public:
 	FOnRestartClicked OnRestartClicked;
 	FOnExitClicked OnExitClicked;
+	FOnInputUpdated OnInputUdpated;
 
 	void SetModel(const TSharedPtr<SnakeGame::Game>& Game);
 
@@ -46,7 +48,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<USG_StartGameWidget> StartGameWidgetClass;
-
+	
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaSeconds) override;
 
@@ -61,17 +63,18 @@ private:
 	TObjectPtr<USG_StartGameWidget> StartGameWidget;
 
 	UPROPERTY()
-	TMap<EMatchState, TObjectPtr<UUserWidget>> GameWidgets;
+	TMap<EGameState, TObjectPtr<UUserWidget>> GameWidgets;
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> CurrentWidget;
-
+	
 	TWeakPtr<SnakeGame::Game> Game;
 
 	FTimerHandle Timer;
 
 	void HandleRestartClick();
 	void HandleExitClick();
+	void HandleInputUpdate(FVector2D InputVector);
 
-	void SetMatchState(EMatchState MatchState);
+	void SetMatchState(EGameState MatchState);
 };

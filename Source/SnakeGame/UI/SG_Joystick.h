@@ -4,6 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "SG_Joystick.generated.h"
 
+DECLARE_DELEGATE_OneParam(FJoystickInputUpdateEvent, FVector2D);
+
 class UImage;
 
 
@@ -20,6 +22,8 @@ public:
 	/** Установить максимальный радиус смещения ручки (в локальных координатах виджета) */
 	UFUNCTION(BlueprintCallable, Category = "Joystick")
 	void SetMaxRadius(float InRadius) { MaxRadius = FMath::Max(0.0f, InRadius); }
+
+	FJoystickInputUpdateEvent InputUpdateEvent;
 	
 protected:
 	// Картинка-подложка для бэкграунда джойстика

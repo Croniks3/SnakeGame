@@ -4,8 +4,8 @@
 #include "Blueprint/UserWidget.h"
 #include "SG_GameOverWidget.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnRestartClicked);
-DECLARE_MULTICAST_DELEGATE(FOnExitClicked);
+DECLARE_DELEGATE(FOnRestartClicked);
+DECLARE_DELEGATE(FOnExitClicked);
 
 class UTextBlock;
 class UButton;

@@ -89,7 +89,7 @@ void USG_Joystick::UpdateFromPointerPosition(const FGeometry& InGeometry, const 
 	InputVector = Offset / MaxRadius;
 
 	// Инвертируем Y, если "вверх" должен быть положительным
-	InputVector.Y = -InputVector.Y;
+	//InputVector.Y = -InputVector.Y;
 
 	if(!InputVector.IsNearlyZero())
 	{
@@ -104,6 +104,9 @@ void USG_Joystick::UpdateFromPointerPosition(const FGeometry& InGeometry, const 
 			InputVector.Y = FMath::Sign(InputVector.Y);
 			InputVector.X = 0.0f;
 		}
+
+		// Вызов события обновления Input
+		InputUpdateEvent.ExecuteIfBound(InputVector);
 	}
 }
 
@@ -174,6 +177,13 @@ FReply USG_Joystick::NativeOnMouseButtonDown(const FGeometry& InGeometry, const 
 		}
 
 		UpdateFromPointerPosition(InGeometry, InMouseEvent.GetScreenSpacePosition());
+
+		if(TSharedPtr<SWidget> Cached = GetCachedWidget())
+		{
+			// Захватываем мышь этим виджетом
+			return FReply::Handled().CaptureMouse(Cached.ToSharedRef());
+		}
+		
 		return FReply::Handled();;
 	}
 
@@ -201,8 +211,13 @@ FReply USG_Joystick::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FP
 
 	if(bIsPressed && InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
 	{
-		/*UE_LOG(LogVirtualJoystick, Display, TEXT("(Class = USG_Joystick, Method = NativeOnMouseButtonUp()): Release Left Mouse Button! "))*/
 		ResetJoystick();
+
+		if(TSharedPtr<SWidget> Cached = GetCachedWidget())
+		{
+			return FReply::Handled().ReleaseMouseCapture();
+		}
+
 		return FReply::Handled();
 	}
 

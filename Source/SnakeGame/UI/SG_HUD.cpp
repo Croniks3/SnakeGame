@@ -11,16 +11,18 @@ void ASG_HUD::BeginPlay()
 
 	GameplayWidget = CreateWidget<USG_GameplayWidget>(GetWorld(), GameplayWidgetClass);
 	check(GameplayWidget);
-	GameWidgets.Add(EMatchState::GameInProgress, GameplayWidget);
+	GameWidgets.Add(EGameState::GameInProgress, GameplayWidget);
+
+	GameplayWidget->InputUpdateEvent.BindUObject(this, &ThisClass::HandleInputUpdate);
 
 	GameOverWidget = CreateWidget<USG_GameOverWidget>(GetWorld(), GameOverWidgetClass);
 	check(GameOverWidget);
-	GameWidgets.Add(EMatchState::GameOver, GameOverWidget);
+	GameWidgets.Add(EGameState::GameOver, GameOverWidget);
 
-	GameOverWidget->OnRestartClicked.AddUObject(this, &ThisClass::HandleRestartClick);
-	GameOverWidget->OnExitClicked.AddUObject(this, &ThisClass::HandleExitClick);
+	GameOverWidget->OnRestartClicked.BindUObject(this, &ThisClass::HandleRestartClick);
+	GameOverWidget->OnExitClicked.BindUObject(this, &ThisClass::HandleExitClick);
 
-	for(auto& [EMatchState, GameWidget] : GameWidgets)
+	for(auto& [EGameState, GameWidget] : GameWidgets)
 	{
 		if(GameWidget)
 		{
@@ -48,7 +50,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 		return;
 	}
 
-	SetMatchState(EMatchState::GameInProgress);
+	SetMatchState(EGameState::GameInProgress);
 
 	Game = InGame;
 	GameplayWidget->UpdateScores(InGame->scores());
@@ -69,7 +71,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 						Timer,
 						[this]()
 						{
-							/*SetMatchState(EMatchState::GameOver);*/
+							/*SetMatchState(EGameState::GameOver);*/
 							if(Game.IsValid())
 							{
 								GameOverWidget->SetTotalGameTimeAndScores(Game.Pin()->gameTime(), Game.Pin()->scores());
@@ -87,15 +89,20 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 
 void ASG_HUD::HandleRestartClick()
 {
-	OnRestartClicked.Broadcast();
+	OnRestartClicked.ExecuteIfBound();
 }
 
 void ASG_HUD::HandleExitClick()
 {
-	OnExitClicked.Broadcast();
+	OnExitClicked.ExecuteIfBound();
 }
 
-void ASG_HUD::SetMatchState(EMatchState MatchState)
+void ASG_HUD::HandleInputUpdate(FVector2D InputVector)
+{
+	OnInputUdpated.ExecuteIfBound(InputVector);
+}
+
+void ASG_HUD::SetMatchState(EGameState MatchState)
 {
 	if(CurrentWidget)
 	{

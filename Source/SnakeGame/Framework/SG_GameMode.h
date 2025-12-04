@@ -93,6 +93,7 @@ private:
 	void OnMoveForward(const FInputActionValue& Value);
 	void OnMoveRight(const FInputActionValue& Value);
 	void OnResetGame(const FInputActionValue& Value);
+	void OnInputUpdatedFromHUD(FVector2D InputVector);
 
 	SnakeGame::Settings CreateGameSettings() const;
 

@@ -189,6 +189,12 @@ void ASG_GameMode::OnResetGame(const FInputActionValue& Value)
 	}
 }
 
+void ASG_GameMode::OnInputUpdatedFromHUD(FVector2D InputVector)
+{
+	Input.x = InputVector.X;
+	Input.y = InputVector.Y;
+}
+
 void ASG_GameMode::ResetGameInternal()
 {
 	Game = MakeShared<SnakeGame::Game>(CreateGameSettings());
@@ -270,13 +276,7 @@ void ASG_GameMode::SubscribeOnGameEvents()
 
 void ASG_GameMode::SubscribeOnHUDEvents()
 {
-	HUD->OnRestartClicked.AddLambda([this]()
-	{
-		ResetGameInternal();
-	});
-
-	HUD->OnExitClicked.AddLambda([this]()
-	{
-		ExitGame();
-	});
+	HUD->OnRestartClicked.BindUObject(this, &ThisClass::ResetGameInternal);
+	HUD->OnExitClicked.BindUObject(this, &ThisClass::ExitGame);
+	HUD->OnInputUdpated.BindUObject(this, &ThisClass::OnInputUpdatedFromHUD);
 }
