@@ -71,7 +71,7 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 						Timer,
 						[this]()
 						{
-							/*SetMatchState(EGameState::GameOver);*/
+							SetMatchState(EGameState::GameOver);
 							if(Game.IsValid())
 							{
 								GameOverWidget->SetTotalGameTimeAndScores(Game.Pin()->gameTime(), Game.Pin()->scores());
