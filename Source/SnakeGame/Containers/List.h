@@ -769,13 +769,18 @@ namespace SnakeGame
 
 		void MoveTailAfterHead()
 		{
+			if(ListSize < 3)
+			{
+				return;
+			}
+
 			auto BeforeTailNode = TailNode->PrevNode;
 			BeforeTailNode->NextNode = nullptr;
 
 			TailNode->NextNode = HeadNode->NextNode;
 			TailNode->PrevNode = HeadNode;
 
-			HeadNode->NextNode->PrevNode = TailNode;
+			HeadNode->NextNode->PrevNode = TailNode; 
 			HeadNode->NextNode = TailNode;
 			
 			TailNode = BeforeTailNode;

@@ -88,12 +88,12 @@ void Game::updateGrid()
 	m_grid->update(m_snake->getBody(), CellType::SnakeCell);
 	m_grid->update(m_food->getPosition(), CellType::FoodCell);
 
-	/*UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()):-------------------------- "));*/
+	UE_LOG(LogGame, Display, TEXT("(Class = Game, Method = updateGrid()):-------------------------- "));
 
 #if !UE_BUILD_SHIPPING
-	/*m_grid->printDebug();
+	m_grid->printDebug();
 	m_food->printDebug();
-	m_snake->printDebug();*/
+	m_snake->printDebug();
 #endif
 }
 

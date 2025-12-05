@@ -42,7 +42,6 @@ void ASG_HUD::Tick(float deltaSeconds)
 
 	if(Game.IsValid() == true && Game.Pin()->isGameOver() == false)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Tick from HUD"));
 		GameplayWidget->SetGameTime(Game.Pin()->gameTime());
 	}
 }

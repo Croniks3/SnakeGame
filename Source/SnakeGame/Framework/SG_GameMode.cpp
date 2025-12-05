@@ -289,6 +289,7 @@ void ASG_GameMode::SubscribeOnGameEvents()
 					UE_LOG(LogSGGameMode, Display, TEXT("------------- GAME COMPLETE! ------------- "));
 					UE_LOG(LogSGGameMode, Display, TEXT("------------- SCORES: %i! ------------- "), Game->scores());
 
+					FoodVisual->Explode();
 					FoodVisual->Hide();
 
 					break;
