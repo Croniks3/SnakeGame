@@ -252,22 +252,15 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 	return settings;
 }
 
-void ASG_GameMode::ExitGame()
+void ASG_GameMode::GoToMainMenu()
 {
 	UWorld* World = GetWorld();
-	if(!World)
+	if(!World || !MainMenu)
 	{
 		return;
 	}
-
-	auto* PC = World->GetFirstPlayerController();
-		
-	UKismetSystemLibrary::QuitGame(
-		World,
-		PC,
-		EQuitPreference::Quit,  
-		false                   
-	);
+	
+	UGameplayStatics::OpenLevelBySoftObjectPtr(World, MainMenu);
 }
 
 void ASG_GameMode::SubscribeOnGameEvents()
@@ -308,6 +301,6 @@ void ASG_GameMode::SubscribeOnGameEvents()
 void ASG_GameMode::SubscribeOnHUDEvents()
 {
 	HUD->OnRestartClicked.BindUObject(this, &ThisClass::ResetGameInternal);
-	HUD->OnExitClicked.BindUObject(this, &ThisClass::ExitGame);
+	HUD->OnBackClicked.BindUObject(this, &ThisClass::GoToMainMenu);
 	HUD->OnInputUdpated.BindUObject(this, &ThisClass::OnInputUpdatedFromHUD);
 }

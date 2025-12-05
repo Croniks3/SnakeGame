@@ -13,9 +13,9 @@ void USG_GameOverWidget::NativeConstruct()
 		RestartButton->OnClicked.AddDynamic(this, &USG_GameOverWidget::HandleInternalRestartClick);
 	}
 	
-	if(ExitButton)
+	if(BackButton)
 	{
-		ExitButton->OnClicked.AddDynamic(this, &USG_GameOverWidget::HandleInternalExitClick);
+		BackButton->OnClicked.AddDynamic(this, &USG_GameOverWidget::HandleInternalBackClick);
 	}
 }
 
@@ -37,7 +37,7 @@ void USG_GameOverWidget::HandleInternalRestartClick()
 	OnRestartClicked.ExecuteIfBound();
 }
 
-void USG_GameOverWidget::HandleInternalExitClick()
+void USG_GameOverWidget::HandleInternalBackClick()
 {
-	OnExitClicked.ExecuteIfBound();
+	OnBackClicked.ExecuteIfBound();
 }

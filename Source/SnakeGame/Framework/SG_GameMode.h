@@ -38,6 +38,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "0.05", ClampMax = "2.0"), Category = "Settings")
 	float GameSpeed{1.0f};
 
+	UPROPERTY(EditDefaultsOnly, Category = "Levels")
+	TSoftObjectPtr<UWorld> MainMenu;
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASG_Grid> GridVisualClass;
 
@@ -107,5 +110,5 @@ private:
 	void SubscribeOnHUDEvents();
 	void ResetGameInternal();
 
-	void ExitGame();
+	void GoToMainMenu();
 };

@@ -24,7 +24,7 @@ void ASG_HUD::BeginPlay()
 	GameWidgets.Add(ESnakeGameState::GameOver, GameOverWidget);
 
 	GameOverWidget->OnRestartClicked.BindUObject(this, &ThisClass::HandleRestartClick);
-	GameOverWidget->OnExitClicked.BindUObject(this, &ThisClass::HandleExitClick);
+	GameOverWidget->OnBackClicked.BindUObject(this, &ThisClass::HandleBackClick);
 
 	for(auto& [ESnakeGameState, GameWidget] : GameWidgets)
 	{
@@ -95,9 +95,9 @@ void ASG_HUD::HandleRestartClick()
 	OnRestartClicked.ExecuteIfBound();
 }
 
-void ASG_HUD::HandleExitClick()
+void ASG_HUD::HandleBackClick()
 {
-	OnExitClicked.ExecuteIfBound();
+	OnBackClicked.ExecuteIfBound();
 }
 
 void ASG_HUD::HandleInputUpdate(FVector2D InputVector)

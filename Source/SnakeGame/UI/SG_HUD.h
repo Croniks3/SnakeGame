@@ -5,7 +5,7 @@
 #include "SG_HUD.generated.h"
 
 DECLARE_DELEGATE(FOnRestartClicked);
-DECLARE_DELEGATE(FOnExitClicked);
+DECLARE_DELEGATE(FOnBackClicked);
 DECLARE_DELEGATE_OneParam(FOnInputUpdated, FVector2D);
 
 UENUM(BlueprintType)
@@ -35,7 +35,7 @@ class SNAKEGAME_API ASG_HUD : public AHUD
 public:
 	ASG_HUD();
 	FOnRestartClicked OnRestartClicked;
-	FOnExitClicked OnExitClicked;
+	FOnBackClicked OnBackClicked;
 	FOnInputUpdated OnInputUdpated;
 
 	void SetModel(const TSharedPtr<SnakeGame::Game>& Game);
@@ -74,7 +74,7 @@ private:
 	FTimerHandle Timer;
 
 	void HandleRestartClick();
-	void HandleExitClick();
+	void HandleBackClick();
 	void HandleInputUpdate(FVector2D InputVector);
 
 	void SetGameState(ESnakeGameState GameState);

@@ -5,7 +5,7 @@
 #include "SG_GameOverWidget.generated.h"
 
 DECLARE_DELEGATE(FOnRestartClicked);
-DECLARE_DELEGATE(FOnExitClicked);
+DECLARE_DELEGATE(FOnBackClicked);
 
 class UTextBlock;
 class UButton;
@@ -21,7 +21,7 @@ public:
 
 public:	
 	FOnRestartClicked OnRestartClicked;
-	FOnExitClicked OnExitClicked;
+	FOnBackClicked OnBackClicked;
 	
 protected:
 	virtual void NativeConstruct() override;
@@ -37,11 +37,11 @@ protected:
 	TObjectPtr<UButton> RestartButton;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> ExitButton;
+	TObjectPtr<UButton> BackButton;
 
 private:
 	UFUNCTION()
 	void HandleInternalRestartClick();
 	UFUNCTION()
-	void HandleInternalExitClick();
+	void HandleInternalBackClick();
 };
