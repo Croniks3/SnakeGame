@@ -18,6 +18,8 @@ class SNAKEGAME_API USG_GameplayWidget : public UUserWidget
 public:
 	FJoystickInputUpdateEvent InputUpdateEvent;
 
+	virtual void SetVisibility(ESlateVisibility InVisibility) override;
+
 	void SetGameTime(float seconds);
 	void UpdateScores(uint32 scores);
 	

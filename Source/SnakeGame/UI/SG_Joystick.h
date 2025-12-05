@@ -23,6 +23,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Joystick")
 	void SetMaxRadius(float InRadius) { MaxRadius = FMath::Max(0.0f, InRadius); }
 
+	void NotifyAboutVisibility(ESlateVisibility InVisibility);
+
 	FJoystickInputUpdateEvent InputUpdateEvent;
 	
 protected:
@@ -38,9 +40,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Joystick")
 	float MaxRadius = 100.0f;
 
-	
 	virtual void NativeConstruct() override;
-
+	
 	virtual FReply NativeOnTouchStarted(const FGeometry& InGeometry, const FPointerEvent& InGestureEvent) override;
 	virtual FReply NativeOnTouchMoved(const FGeometry& InGeometry, const FPointerEvent& InGestureEvent) override;
 	virtual FReply NativeOnTouchEnded(const FGeometry& InGeometry, const FPointerEvent& InGestureEvent) override;

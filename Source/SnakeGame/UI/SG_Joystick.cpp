@@ -42,6 +42,14 @@ void USG_Joystick::ResetJoystick()
 	}
 }
 
+void USG_Joystick::NotifyAboutVisibility(ESlateVisibility InVisibility)
+{
+	if(InVisibility == ESlateVisibility::Collapsed)
+	{
+		ResetJoystick();
+	}
+}
+
 void USG_Joystick::UpdateFromPointerPosition(const FGeometry& InGeometry, const FVector2D& ScreenSpacePosition)
 {
 	// Переводим позицию указателя из screen space в локальные координаты виджета

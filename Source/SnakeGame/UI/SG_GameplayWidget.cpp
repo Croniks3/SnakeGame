@@ -9,6 +9,16 @@ void USG_GameplayWidget::NativeConstruct()
 	JoystickWidget->InputUpdateEvent.BindUObject(this, &ThisClass::OnInputUpdated);
 }
 
+void USG_GameplayWidget::SetVisibility(ESlateVisibility InVisibility)
+{
+	Super::SetVisibility(InVisibility);
+
+	if(JoystickWidget)
+	{
+		JoystickWidget->NotifyAboutVisibility(InVisibility);
+	}
+}
+
 void USG_GameplayWidget::SetGameTime(float seconds)
 {
 	if(TimeText)
