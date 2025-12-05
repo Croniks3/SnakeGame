@@ -9,9 +9,9 @@ DECLARE_DELEGATE(FOnExitClicked);
 DECLARE_DELEGATE_OneParam(FOnInputUpdated, FVector2D);
 
 UENUM(BlueprintType)
-enum class EGameState : uint8
+enum class ESnakeGameState : uint8
 {
-	StartGame        UMETA(DisplayName = "StartGame"),
+	MainMenu		 UMETA(DisplayName = "MainMenu"),
 	GameInProgress   UMETA(DisplayName = "GameInProgress"),
 	GameOver         UMETA(DisplayName = "GameOver"),
 	GameCompleted    UMETA(DisplayName = "GameCompleted")
@@ -19,7 +19,7 @@ enum class EGameState : uint8
 
 class USG_GameplayWidget;
 class USG_GameOverWidget;
-class USG_StartGameWidget;
+class USG_MainMenuWidget;
 
 namespace SnakeGame
 {
@@ -33,6 +33,7 @@ class SNAKEGAME_API ASG_HUD : public AHUD
 	GENERATED_BODY()
 	
 public:
+	ASG_HUD();
 	FOnRestartClicked OnRestartClicked;
 	FOnExitClicked OnExitClicked;
 	FOnInputUpdated OnInputUdpated;
@@ -47,7 +48,7 @@ protected:
 	TSubclassOf<USG_GameOverWidget> GameOverWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<USG_StartGameWidget> StartGameWidgetClass;
+	TSubclassOf<USG_MainMenuWidget> MainMenuWidgetClass;
 	
 	virtual void BeginPlay() override;
 	virtual void Tick(float deltaSeconds) override;
@@ -60,10 +61,10 @@ private:
 	TObjectPtr<USG_GameOverWidget> GameOverWidget;
 
 	UPROPERTY()
-	TObjectPtr<USG_StartGameWidget> StartGameWidget;
+	TObjectPtr<USG_MainMenuWidget> MainMenuWidget;
 
 	UPROPERTY()
-	TMap<EGameState, TObjectPtr<UUserWidget>> GameWidgets;
+	TMap<ESnakeGameState, TObjectPtr<UUserWidget>> GameWidgets;
 
 	UPROPERTY()
 	TObjectPtr<UUserWidget> CurrentWidget;
@@ -76,5 +77,5 @@ private:
 	void HandleExitClick();
 	void HandleInputUpdate(FVector2D InputVector);
 
-	void SetMatchState(EGameState MatchState);
+	void SetGameState(ESnakeGameState GameState);
 };

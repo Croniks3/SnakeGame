@@ -11,7 +11,7 @@ class ASG_Grid;
 class ASG_Snake;
 class ASG_Food;
 class ASG_HUD;
-class AExponentialHeightFog;
+class AStaticMeshActor;
 class UInputAction;
 class UInputMappingContext;
 
@@ -47,6 +47,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ASG_Food> FoodVisualClass;
 	
+	UPROPERTY(EditDefaultsOnly)
+	UMaterialInterface* BackgroundMaterialInstance;
+	
+	UPROPERTY(EditDefaultsOnly)
+	UStaticMesh* BackgroundStaticMesh;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Design")
 	TObjectPtr <UDataTable> ColorsTable;
 
@@ -76,7 +82,7 @@ private:
 	TObjectPtr<ASG_HUD> HUD;
 
 	UPROPERTY()
-	TObjectPtr<AExponentialHeightFog> Fog;
+	TObjectPtr<AStaticMeshActor> BackgroundPlane;
 
 	UFUNCTION(Exec, Category = "Console command")
 	void NextColor();
@@ -87,7 +93,7 @@ private:
 	SnakeGame::SnakeInput Input{SnakeGame::SnakeInput::Default};
 
 	void UpdateColors();
-	void FindFog();
+	void CreateBackgroundPlane();
 
 	void SetupInput();
 	void OnMoveForward(const FInputActionValue& Value);

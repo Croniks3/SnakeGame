@@ -1,4 +1,4 @@
-#include "Framework/SG_GameMode.h"
+ï»¿#include "Framework/SG_GameMode.h"
 #include "Core/SG_Types.h"
 #include "World/SG_WorldTypes.h"
 #include "World/SG_Grid.h"
@@ -8,8 +8,7 @@
 #include "Core/Grid.h"
 #include "LoggingConfig.h"
 #include "Framework/SG_GridPawn.h"
-#include "Engine/ExponentialHeightFog.h"
-#include "Components/ExponentialHeightFogComponent.h"
+#include "Engine/StaticMeshActor.h"
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
@@ -65,7 +64,7 @@ void ASG_GameMode::StartPlay()
 
 	gridPawn->UpdateLocation(Game->getGrid()->dimensions(), CellSize, gridOrigin);
 
-	FindFog();
+	CreateBackgroundPlane();
 
 	// Update colors
 	check(ColorsTable);
@@ -91,7 +90,7 @@ void ASG_GameMode::StartPlay()
 	pc->bEnableClickEvents = true;
 	pc->bEnableMouseOverEvents = true;
 
-	// Ðåæèì ââîäà: Game + UI
+	// Ð ÐµÐ¶Ð¸Ð¼ Ð²Ð²Ð¾Ð´Ð°: Game + UI
 	FInputModeGameAndUI InputMode;
 	InputMode.SetHideCursorDuringCapture(false);                          
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);  
@@ -119,22 +118,53 @@ void ASG_GameMode::UpdateColors()
 		SnakeVisual->SetColors(colorsSet->SnakeHeadColor, colorsSet->SnakeLinkColor);
 		FoodVisual->SetColor(colorsSet->FoodColor);
 
-		if (Fog != nullptr && Fog->GetComponent() != nullptr)
+		if (BackgroundPlane)
 		{
-			Fog->GetComponent()->SetSkyAtmosphereAmbientContributionColorScale(colorsSet->SkyAtmosphereColor);
-			Fog->GetComponent()->MarkRenderStateDirty();
+			UStaticMeshComponent* MeshComp = BackgroundPlane->GetStaticMeshComponent();
+			if(!MeshComp)
+			{
+				return;
+			}
+
+			MeshComp->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector4(
+				colorsSet->SkyAtmosphereColor.R,
+				colorsSet->SkyAtmosphereColor.G,
+				colorsSet->SkyAtmosphereColor.B,
+				colorsSet->SkyAtmosphereColor.A
+			));
 		}
 	}
 }
 
-void ASG_GameMode::FindFog()
+void ASG_GameMode::CreateBackgroundPlane()
 {
-	TArray<AActor*> Fogs;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AExponentialHeightFog::StaticClass(), Fogs);
-	if (Fogs.Num() > 0)
+	UWorld* World = GetWorld();
+	if(!World || !BackgroundStaticMesh || !BackgroundMaterialInstance)
 	{
-		Fog = Cast<AExponentialHeightFog>(Fogs[0]);
+		return;
 	}
+
+	BackgroundPlane = World->SpawnActor<AStaticMeshActor>();
+	
+	if(!BackgroundPlane)
+	{
+		return;
+	}
+	
+	BackgroundPlane->SetMobility(EComponentMobility::Movable);
+	
+	UStaticMeshComponent* MeshComp = BackgroundPlane->GetStaticMeshComponent();
+	if(!MeshComp)
+	{
+		return;
+	}
+	
+	MeshComp->SetStaticMesh(BackgroundStaticMesh);
+	MeshComp->SetMaterial(0, BackgroundMaterialInstance);
+
+	BackgroundPlane->SetActorLocation(FVector(0, 0, -0.01));
+	BackgroundPlane->SetActorRotation(FQuat::Identity);
+	BackgroundPlane->SetActorScale3D(FVector(1000, 1000, 1));
 }
 
 void ASG_GameMode::NextColor()
