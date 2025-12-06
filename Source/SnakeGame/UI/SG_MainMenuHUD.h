@@ -16,9 +16,7 @@ class SNAKEGAME_API ASG_MainMenuHUD : public AHUD
 	
 public:
 	FStartGameClick StartGameClickEvent;
-
-	ASG_MainMenuHUD();
-
+	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<USG_MainMenuWidget> MainMenuWidgetClass;

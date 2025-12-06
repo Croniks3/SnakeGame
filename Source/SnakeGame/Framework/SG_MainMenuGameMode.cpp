@@ -7,6 +7,8 @@
 
 void ASG_MainMenuGameMode::StartPlay()
 {
+	Super::StartPlay();
+
 	UWorld* World = GetWorld();
 	check(World);
 	if(!World) { return; }
@@ -25,7 +27,7 @@ void ASG_MainMenuGameMode::StartPlay()
 void ASG_MainMenuGameMode::HandleStartGameClick()
 {
 	UWorld* World = GetWorld();
-	if(!World || !GameplayLevel)
+	if(!World || GameplayLevel.IsNull())
 	{
 		return;
 	}
