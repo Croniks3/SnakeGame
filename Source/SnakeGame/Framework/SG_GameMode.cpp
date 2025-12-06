@@ -255,7 +255,7 @@ SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 void ASG_GameMode::GoToMainMenu()
 {
 	UWorld* World = GetWorld();
-	if(!World || !MainMenu)
+	if(!World || MainMenu.IsNull())
 	{
 		return;
 	}

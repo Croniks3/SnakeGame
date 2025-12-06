@@ -12,6 +12,9 @@ class SNAKEGAME_API ASG_MainMenuGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void StartPlay() override;
+
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Levels")
 	TSoftObjectPtr<UWorld> GameplayLevel;
@@ -19,4 +22,6 @@ protected:
 private:
 	UPROPERTY()
 	TObjectPtr<ASG_MainMenuHUD> MainMenuHUD;
+
+	void HandleStartGameClick();
 };
