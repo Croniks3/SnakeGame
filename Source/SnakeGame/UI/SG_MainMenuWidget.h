@@ -5,6 +5,7 @@
 #include "SG_MainMenuWidget.generated.h"
 
 DECLARE_DELEGATE(FStartGameClick);
+DECLARE_DELEGATE(FExitGameClick);
 
 class UButton;
 
@@ -16,14 +17,21 @@ class SNAKEGAME_API USG_MainMenuWidget : public UUserWidget
 
 public:
 	FStartGameClick StartGameClickEvent;
+	FStartGameClick ExitGameClickEvent;
 
 protected:
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UButton> StartGameButton;
+	TObjectPtr<UButton> StartButton;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UButton> ExitButton;
 
 	virtual void NativeOnInitialized() override;
 
 private:
 	UFUNCTION()
 	void HandleInternalStartGameClick();
+
+	UFUNCTION()
+	void HandleInternalExitGameClick();
 };

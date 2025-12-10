@@ -24,4 +24,5 @@ private:
 	TObjectPtr<ASG_MainMenuHUD> MainMenuHUD;
 
 	void HandleStartGameClick();
+	void HandleExitGameClick();
 };

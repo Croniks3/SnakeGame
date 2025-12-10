@@ -81,16 +81,16 @@ void ASG_GameMode::StartPlay()
 	check(HUD);
 	HUD->SetModel(Game);
 
-	// Events
+	// Subscribe to events
 	SubscribeOnGameEvents();
 	SubscribeOnHUDEvents();
 
-	// Mouse
+	// Mouse setup
 	pc->bShowMouseCursor = true;
 	pc->bEnableClickEvents = true;
 	pc->bEnableMouseOverEvents = true;
 
-	// Режим ввода: Game + UI
+	// Input mode setup: Game + UI
 	FInputModeGameAndUI InputMode;
 	InputMode.SetHideCursorDuringCapture(false);                          
 	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);  

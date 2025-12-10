@@ -5,6 +5,7 @@
 #include "SG_MainMenuHUD.generated.h"
 
 DECLARE_DELEGATE(FStartGameClick);
+DECLARE_DELEGATE(FExitGameClick);
 
 class USG_MainMenuWidget;
 
@@ -16,6 +17,7 @@ class SNAKEGAME_API ASG_MainMenuHUD : public AHUD
 	
 public:
 	FStartGameClick StartGameClickEvent;
+	FStartGameClick ExitGameClickEvent;
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
@@ -28,4 +30,5 @@ private:
 	TObjectPtr<USG_MainMenuWidget> MainMenuWidget;
 
 	void HandleStartGameClick();
+	void HandleExitGameClick();
 };

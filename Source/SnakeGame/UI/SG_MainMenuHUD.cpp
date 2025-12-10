@@ -11,9 +11,15 @@ void ASG_MainMenuHUD::BeginPlay()
 	MainMenuWidget->AddToViewport();
 
 	MainMenuWidget->StartGameClickEvent.BindUObject(this, &ThisClass::HandleStartGameClick);
+	MainMenuWidget->ExitGameClickEvent.BindUObject(this, &ThisClass::HandleExitGameClick);
 }
 
 void ASG_MainMenuHUD::HandleStartGameClick()
 {
 	StartGameClickEvent.ExecuteIfBound();
+}
+
+void ASG_MainMenuHUD::HandleExitGameClick()
+{
+	ExitGameClickEvent.ExecuteIfBound();
 }
