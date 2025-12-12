@@ -16,7 +16,9 @@ public class SnakeGame : ModuleRules
 			"UMG", 
 			"InputCore", 
 			"EnhancedInput", 
-			"Niagara" 
+			"Niagara",
+			"Slate",
+			"SlateCore"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

@@ -8,6 +8,7 @@ DECLARE_DELEGATE(FStartGameClick);
 DECLARE_DELEGATE(FExitGameClick);
 
 class UButton;
+class UComboBoxString;
 
 
 UCLASS()
@@ -26,6 +27,12 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UButton> ExitButton;
 
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UComboBoxString> GameSpeedComboBox;
+
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UComboBoxString> GridSizeComboBox;
+
 	virtual void NativeOnInitialized() override;
 
 private:
@@ -34,4 +41,12 @@ private:
 
 	UFUNCTION()
 	void HandleInternalExitGameClick();
+
+	UFUNCTION()
+	void HandleInternalGameSpeedOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
+
+	UFUNCTION()
+	void HandleInternalGridSizeOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
+
+	void SaveSettings();
 };
