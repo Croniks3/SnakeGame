@@ -91,8 +91,8 @@ private:
 		{EGridSize::Size_10x10, {"10x10",  SnakeGame::Dimensions{10, 10}}}
 	};
 
-	FSpeedData CurrentSpeed{GameSpeeds[EGameSpeed::Normal]};
-	FGridData CurrentGridSize{GridSizes[EGridSize::Size_8x8]};
+	FSpeedData CurrentSpeed{GameSpeeds.FindChecked(EGameSpeed::Normal)};
+	FGridData CurrentGridSize{GridSizes.FindChecked(EGridSize::Size_8x8)};
 
 	template<typename MapType, typename EnumType>
 	EnumType FindGameOptionEnumByName(const MapType& Map, const FString& Name, EnumType Default);
