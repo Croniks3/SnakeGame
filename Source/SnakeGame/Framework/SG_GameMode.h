@@ -26,6 +26,9 @@ public:
 	virtual void Tick(float deltaSeconds) override;
 
 protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Settings")
+	bool bOverrideUserSettings{false};
+
 	UPROPERTY(EditDefaultsOnly, meta = (ClampMin = "3", ClampMax = "100"), Category = "Settings")
 	FUint32Point GridSize{10, 10};
 

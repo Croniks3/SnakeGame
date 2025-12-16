@@ -26,12 +26,12 @@ void USG_MainMenuWidget::NativeOnInitialized()
 	{
 		GameSpeedComboBox->ClearOptions();
 
-		for(const FString& GameSpeedOption : UserSettings->GetGameSpeedOptions())
+		for(const FString& GameSpeedOption : UserSettings->GetGameSpeedOptionNames())
 		{
 			GameSpeedComboBox->AddOption(GameSpeedOption);
 		}
 		
-		GameSpeedComboBox->SetSelectedOption(UserSettings->GetCurrentGameSpeedOption());
+		GameSpeedComboBox->SetSelectedOption(UserSettings->GetCurrentGameSpeedOptionName());
 		GameSpeedComboBox->OnSelectionChanged.AddDynamic(this, &ThisClass::HandleInternalGameSpeedOptionChanged);
 	}
 
@@ -39,12 +39,12 @@ void USG_MainMenuWidget::NativeOnInitialized()
 	{
 		GridSizeComboBox->ClearOptions();
 
-		for(const FString& GridSizeOption : UserSettings->GetGridSizeOptions())
+		for(const FString& GridSizeOption : UserSettings->GetGridSizeOptionNames())
 		{
 			GridSizeComboBox->AddOption(GridSizeOption);
 		}
 
-		GridSizeComboBox->SetSelectedOption(UserSettings->GetCurrentGridSizeOption());
+		GridSizeComboBox->SetSelectedOption(UserSettings->GetCurrentGridSizeOptionName());
 		GridSizeComboBox->OnSelectionChanged.AddDynamic(this, &ThisClass::HandleInternalGridSizeOptionChanged);
 	}
 }

@@ -28,34 +28,34 @@ class SNAKEGAME_API USG_GameUserSettings : public UGameUserSettings
 	GENERATED_BODY()
 	
 public:
-	TArray<FString> GetGameSpeedOptions() const
+	TArray<FString> GetGameSpeedOptionNames() const
 	{
-		TArray<FString> GameSpeedOtions;
-		for(const TPair<EGameSpeed, FSpeedData>& GameSpeed : GameSpeeds)
-		{
-			GameSpeedOtions.Add(GameSpeed.Value.Name);
-		}
-		return GameSpeedOtions;
+		return GetGameOptionNames(GameSpeeds);
 	}
 
-	TArray<FString> GetGridSizeOptions() const
+	TArray<FString> GetGridSizeOptionNames() const
 	{
-		TArray<FString> GridSizeOtions;
-		for(const TPair<EGridSize, FGridData>& GridSize : GridSizes)
-		{
-			GridSizeOtions.Add(GridSize.Value.Name);
-		}
-		return GridSizeOtions;
+		return GetGameOptionNames(GridSizes);
 	}
 
-	FString GetCurrentGameSpeedOption() const
+	FString GetCurrentGameSpeedOptionName() const
 	{
 		return CurrentSpeed.Name;
 	}
 
-	FString GetCurrentGridSizeOption() const
+	FString GetCurrentGridSizeOptionName() const
 	{
 		return CurrentGridSize.Name;
+	}
+
+	float GetCurrentGameSpeed() const
+	{
+		return CurrentSpeed.Value;
+	}
+
+	SnakeGame::Dimensions GetCurrentGridSize() const
+	{
+		return CurrentGridSize.Dimensions;
 	}
 
 	void SetSnakeSettings(EGameSpeed GameSpeed, EGridSize GridSize);
@@ -96,4 +96,7 @@ private:
 
 	template<typename MapType, typename EnumType>
 	EnumType FindGameOptionEnumByName(const MapType& Map, const FString& Name, EnumType Default);
+
+	template<typename MapType>
+	TArray<FString> GetGameOptionNames(const MapType& Map) const;
 };

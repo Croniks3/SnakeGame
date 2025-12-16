@@ -77,6 +77,23 @@ void ASG_HUD::SetModel(const TSharedPtr<SnakeGame::Game>& InGame)
 							SetGameState(ESnakeGameState::GameOver);
 							if(Game.IsValid())
 							{
+								GameOverWidget->SetWidgetLabelText(TEXT("Game Over"));
+								GameOverWidget->SetTotalGameTimeAndScores(Game.Pin()->gameTime(), Game.Pin()->scores());
+							}
+						},
+						1.0f,
+						false
+					);
+				break;
+			case SnakeGame::GameplayEventType::GameCompleted:
+				GetWorldTimerManager().SetTimer(
+						Timer,
+						[this]()
+						{
+							SetGameState(ESnakeGameState::GameOver);
+							if(Game.IsValid())
+							{
+								GameOverWidget->SetWidgetLabelText(TEXT("Game Complete"));
 								GameOverWidget->SetTotalGameTimeAndScores(Game.Pin()->gameTime(), Game.Pin()->scores());
 							}
 						},

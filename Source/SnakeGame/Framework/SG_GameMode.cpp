@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Framework/SG_GameUserSettings.h"
 #include <EnhancedInputComponent.h>
 
 DEFINE_LOG_CATEGORY_STATIC(LogSGGameMode, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
@@ -242,11 +243,27 @@ void ASG_GameMode::ResetGameInternal()
 SnakeGame::Settings ASG_GameMode::CreateGameSettings() const
 {
 	SnakeGame::Settings settings;
+	
+	if(!bOverrideUserSettings)
+	{
+		if(GEngine)
+		{
+			if(USG_GameUserSettings* UserSettings = Cast<USG_GameUserSettings>(GEngine->GetGameUserSettings()))
+			{
+				settings.gridSize = UserSettings->GetCurrentGridSize();
+				settings.snakeSettings.defaultSize = SnakeDefaultSize;
+				settings.snakeSettings.startPosition = SnakeGame::Grid::center(settings.gridSize.width, settings.gridSize.height);
+				settings.gameSpeed = UserSettings->GetCurrentGameSpeed();
 
+				return settings;
+			}
+		}
+		
+	}
+	
 	settings.gridSize = SnakeGame::Dimensions{GridSize.X, GridSize.Y};
 	settings.snakeSettings.defaultSize = SnakeDefaultSize;
 	settings.snakeSettings.startPosition = SnakeGame::Grid::center(GridSize.X, GridSize.Y);
-		/*SnakeGame::Position{GridSize.X / 2 + 1, GridSize.Y / 2 + 1}*/;
 	settings.gameSpeed = GameSpeed;
 
 	return settings;

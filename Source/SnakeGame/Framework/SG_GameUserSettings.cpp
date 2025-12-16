@@ -30,3 +30,14 @@ EnumType USG_GameUserSettings::FindGameOptionEnumByName(const MapType& Map, cons
 
 	return Default;
 }
+
+template<typename MapType>
+TArray<FString> USG_GameUserSettings::GetGameOptionNames(const MapType& Map) const
+{
+	TArray<FString> GameOtionNames;
+	for(const auto& Element : Map)
+	{
+		GameOtionNames.Add(Element.Value.Name);
+	}
+	return GameOtionNames;
+}

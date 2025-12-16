@@ -18,6 +18,7 @@ class SNAKEGAME_API USG_GameOverWidget : public UUserWidget
 
 public:
 	void SetTotalGameTimeAndScores(float Seconds, uint32 Scores);
+	void SetWidgetLabelText(const FString& Text);
 
 public:	
 	FOnRestartClicked OnRestartClicked;
@@ -27,6 +28,9 @@ protected:
 	virtual void NativeConstruct() override;
 
 protected:
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> GameOverTextLabel;
+
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> TimeTextValue;
 

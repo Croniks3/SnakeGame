@@ -32,6 +32,14 @@ void USG_GameOverWidget::SetTotalGameTimeAndScores(float Seconds, uint32 Scores)
 	}
 }
 
+void USG_GameOverWidget::SetWidgetLabelText(const FString& Text)
+{
+	if(GameOverTextLabel)
+	{
+		GameOverTextLabel->SetText(FText::FromString(Text));
+	}
+}
+
 void USG_GameOverWidget::HandleInternalRestartClick()
 {
 	OnRestartClicked.ExecuteIfBound();
