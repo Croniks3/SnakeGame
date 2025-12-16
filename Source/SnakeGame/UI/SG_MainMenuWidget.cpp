@@ -7,11 +7,7 @@
 void USG_MainMenuWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
-
-	if(!GEngine) { return; };
-	USG_GameUserSettings* UserSettings = Cast<USG_GameUserSettings>(GEngine->GetGameUserSettings());
-	if(!UserSettings) { return; } // @todo: add error
-
+	
 	if(StartButton)
 	{
 		StartButton->OnClicked.AddDynamic(this, &ThisClass::HandleInternalStartGameClick);
@@ -22,31 +18,12 @@ void USG_MainMenuWidget::NativeOnInitialized()
 		ExitButton->OnClicked.AddDynamic(this, &ThisClass::HandleInternalExitGameClick);
 	}
 
-	if(GameSpeedComboBox)
-	{
-		GameSpeedComboBox->ClearOptions();
+	if(!GEngine) { return; };
+	USG_GameUserSettings* UserSettings = Cast<USG_GameUserSettings>(GEngine->GetGameUserSettings());
+	if(!UserSettings) { return; } // @todo: make error
 
-		for(const FString& GameSpeedOption : UserSettings->GetGameSpeedOptionNames())
-		{
-			GameSpeedComboBox->AddOption(GameSpeedOption);
-		}
-		
-		GameSpeedComboBox->SetSelectedOption(UserSettings->GetCurrentGameSpeedOptionName());
-		GameSpeedComboBox->OnSelectionChanged.AddDynamic(this, &ThisClass::HandleInternalGameSpeedOptionChanged);
-	}
-
-	if(GridSizeComboBox)
-	{
-		GridSizeComboBox->ClearOptions();
-
-		for(const FString& GridSizeOption : UserSettings->GetGridSizeOptionNames())
-		{
-			GridSizeComboBox->AddOption(GridSizeOption);
-		}
-
-		GridSizeComboBox->SetSelectedOption(UserSettings->GetCurrentGridSizeOptionName());
-		GridSizeComboBox->OnSelectionChanged.AddDynamic(this, &ThisClass::HandleInternalGridSizeOptionChanged);
-	}
+	SetupComboBoxByNames(GameSpeedComboBox, UserSettings->GetGameSpeedOptionNames(), UserSettings->GetCurrentGameSpeedOptionName());
+	SetupComboBoxByNames(GridSizeComboBox, UserSettings->GetGridSizeOptionNames(), UserSettings->GetCurrentGridSizeOptionName());
 }
 
 void USG_MainMenuWidget::HandleInternalStartGameClick()
@@ -59,20 +36,26 @@ void USG_MainMenuWidget::HandleInternalExitGameClick()
 	ExitGameClickEvent.ExecuteIfBound();
 }
 
-void USG_MainMenuWidget::HandleInternalGameSpeedOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
+void USG_MainMenuWidget::SetupComboBoxByNames(TObjectPtr<UComboBoxString> ComboBox, const TArray<FString>& OptionNames, const FString& SelectedOption)
 {
-	if(SelectionType != ESelectInfo::Direct)
+	if(ComboBox)
 	{
-		UE_LOG(LogTemp, Display, TEXT("%s"), *GameSpeedComboBox->GetSelectedOption());
-		SaveSettings();
+		ComboBox->ClearOptions();
+
+		for(const FString& OptionName : OptionNames)
+		{
+			ComboBox->AddOption(OptionName);
+		}
+
+		ComboBox->SetSelectedOption(SelectedOption);
+		ComboBox->OnSelectionChanged.AddDynamic(this, &ThisClass::HandleInternalMenuOptionChanged);
 	}
 }
 
-void USG_MainMenuWidget::HandleInternalGridSizeOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
+void USG_MainMenuWidget::HandleInternalMenuOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType)
 {
 	if(SelectionType != ESelectInfo::Direct)
 	{
-		UE_LOG(LogTemp, Display, TEXT("%s"), *GridSizeComboBox->GetSelectedOption());
 		SaveSettings();
 	}
 }

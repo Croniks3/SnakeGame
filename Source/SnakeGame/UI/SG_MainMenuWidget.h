@@ -43,10 +43,8 @@ private:
 	void HandleInternalExitGameClick();
 
 	UFUNCTION()
-	void HandleInternalGameSpeedOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
-
-	UFUNCTION()
-	void HandleInternalGridSizeOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
-
+	void HandleInternalMenuOptionChanged(FString SelectedItem, ESelectInfo::Type SelectionType);
+	
+	void SetupComboBoxByNames(TObjectPtr<UComboBoxString> ComboBox, const TArray<FString>& OptionNames, const FString& SelectedOption);
 	void SaveSettings();
 };
