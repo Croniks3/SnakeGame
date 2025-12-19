@@ -38,4 +38,12 @@ private:
 
 	UPROPERTY()
 	TArray<ASG_SnakeLink*> SnakeLinks;
+
+private:
+	// SnakeLink object pool
+	UPROPERTY()
+	TArray<TObjectPtr<ASG_SnakeLink>> SnakeLinksPool;
+
+	TObjectPtr<ASG_SnakeLink> GetSnakeLinkFromPool(const TSubclassOf<ASG_SnakeLink>& SnakeLinkClass, const FTransform& Transform);
+	void AddSnakeLinkToPool(TObjectPtr<ASG_SnakeLink>& SnakeLink);
 };

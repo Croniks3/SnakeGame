@@ -31,9 +31,8 @@ void ASG_Snake::SetModel(const TSharedPtr<SnakeGame::Snake>& InSnake, uint32 InC
 	{
 		const bool isHead = i == 0;
 		const FTransform transform = FTransform(SnakeGame::WorldUtils::GridPositionToVector(link, CellSize, GridDimensions));
-		ASG_SnakeLink* snakeLink = GetWorld()->SpawnActorDeferred<ASG_SnakeLink>(isHead ? SnakeHeadClass : SnakeLinkClass, transform);
+		ASG_SnakeLink* snakeLink = GetSnakeLinkFromPool(isHead ? SnakeHeadClass : SnakeLinkClass, transform);
 		snakeLink->SetScale(CellSize);
-		snakeLink->FinishSpawning(transform);
 		SnakeLinks.Add(snakeLink);
 		++i;
 	}
@@ -84,11 +83,20 @@ void ASG_Snake::Tick(float DeltaTime)
 	while(modelLinkPtr) 
 	{
 		const FTransform transform = FTransform(SnakeGame::WorldUtils::GridPositionToVector(modelLinkPtr->GetValue(), CellSize, GridDimensions));
-		ASG_SnakeLink* snakeLink = GetWorld()->SpawnActorDeferred<ASG_SnakeLink>(SnakeLinkClass, transform);
+		ASG_SnakeLink* snakeLink = GetSnakeLinkFromPool(SnakeLinkClass, transform);
 		snakeLink->SetScale(CellSize);
 		snakeLink->SetColor(SnakeLinkColor);
-		snakeLink->FinishSpawning(transform);
 		SnakeLinks.Add(snakeLink);
 		modelLinkPtr = modelLinkPtr->GetNextNode();
 	}
+}
+
+TObjectPtr<ASG_SnakeLink> ASG_Snake::GetSnakeLinkFromPool(const TSubclassOf<ASG_SnakeLink>& InSnakeLinkClass, const FTransform& Transform)
+{
+	return GetWorld()->SpawnActor<ASG_SnakeLink>(InSnakeLinkClass, Transform);
+}
+
+void ASG_Snake::AddSnakeLinkToPool(TObjectPtr<ASG_SnakeLink>& SnakeLink)
+{
+
 }
