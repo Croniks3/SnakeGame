@@ -16,9 +16,9 @@ void ASG_Snake::SetModel(const TSharedPtr<SnakeGame::Snake>& InSnake, uint32 InC
 	CellSize = InCellSize;
 	GridDimensions = InGridDimensions;
 
-	for(auto* SnakeLink : SnakeLinks)
+	for(auto SnakeLink : SnakeLinks)
 	{
-		SnakeLink->Destroy();
+		AddSnakeLinkToPool(SnakeLink);
 	}
 	SnakeLinks.Empty();
 
@@ -74,7 +74,7 @@ void ASG_Snake::Tick(float DeltaTime)
 	const auto& modelLinks = Snake.Pin()->getLinks();
 	auto* modelLinkPtr = modelLinks.GetHead();
 
-	for(auto* actorLink : SnakeLinks)
+	for(auto actorLink : SnakeLinks)
 	{
 		actorLink->SetActorLocation(SnakeGame::WorldUtils::GridPositionToVector(modelLinkPtr->GetValue(), CellSize, GridDimensions));
 		modelLinkPtr = modelLinkPtr->GetNextNode();
@@ -93,10 +93,20 @@ void ASG_Snake::Tick(float DeltaTime)
 
 TObjectPtr<ASG_SnakeLink> ASG_Snake::GetSnakeLinkFromPool(const TSubclassOf<ASG_SnakeLink>& InSnakeLinkClass, const FTransform& Transform)
 {
-	return GetWorld()->SpawnActor<ASG_SnakeLink>(InSnakeLinkClass, Transform);
+	TObjectPtr<ASG_SnakeLink> SnakeLink = (SnakeLinksPool.Num() > 0) ? 
+												SnakeLinksPool.Pop() : 
+												TObjectPtr<ASG_SnakeLink>(GetWorld()->SpawnActor<ASG_SnakeLink>(InSnakeLinkClass, Transform));
+	SnakeLink->SetActorHiddenInGame(false);
+	SnakeLink->SetActorTransform(Transform);
+
+	return SnakeLink;
 }
 
 void ASG_Snake::AddSnakeLinkToPool(TObjectPtr<ASG_SnakeLink>& SnakeLink)
 {
+	SnakeLinksPool.Push(SnakeLink);
 
+	SnakeLink->SetActorHiddenInGame(false); // @todo: make true
+	SnakeLink->SetActorLocation(FVector(0.0, SnakeLinksPool.Num() * 150.0, 0.0));
+	SnakeLink->SetColor(FLinearColor::Yellow);
 }

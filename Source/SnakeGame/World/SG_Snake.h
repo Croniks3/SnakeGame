@@ -37,7 +37,7 @@ private:
 	FLinearColor SnakeLinkColor;
 
 	UPROPERTY()
-	TArray<ASG_SnakeLink*> SnakeLinks;
+	TArray<TObjectPtr<ASG_SnakeLink>> SnakeLinks;
 
 private:
 	// SnakeLink object pool
