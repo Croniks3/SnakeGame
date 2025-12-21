@@ -3,6 +3,8 @@
 #include "SG_WorldUtils.h"
 #include "LoggingConfig.h"
 
+#pragma optimize("", off)
+
 DEFINE_LOG_CATEGORY_STATIC(LogSGSnake, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 ASG_Snake::ASG_Snake()
@@ -26,6 +28,7 @@ void ASG_Snake::SetModel(const TSharedPtr<SnakeGame::Snake>& InSnake, uint32 InC
 
 	const auto& links = Snake.Pin()->getLinks();
 
+	ReserveLinksInPool(SnakeLinkClass, LinksPoolCapacity);
 	uint32 i = 0;
 	for(const auto& link : links)
 	{
@@ -91,6 +94,19 @@ void ASG_Snake::Tick(float DeltaTime)
 	}
 }
 
+void ASG_Snake::ReserveLinksInPool(const TSubclassOf<ASG_SnakeLink>& InSnakeLinkClass, int32 Number)
+{
+	const int32 LinksNumber = SnakeLinksPool.Num();
+	if(LinksNumber < Number)
+	{
+		SnakeLinksPool.Reserve(Number);
+		for(int32 i = 0; i < Number - LinksNumber; ++i)
+		{
+			AddSnakeLinkToPool(GetWorld()->SpawnActor<ASG_SnakeLink>(InSnakeLinkClass, FTransform::Identity));
+		}
+	}
+}
+
 TObjectPtr<ASG_SnakeLink> ASG_Snake::GetSnakeLinkFromPool(const TSubclassOf<ASG_SnakeLink>& InSnakeLinkClass, const FTransform& Transform)
 {
 	TObjectPtr<ASG_SnakeLink> SnakeLink = (SnakeLinksPool.Num() > 0) ? 
@@ -102,11 +118,8 @@ TObjectPtr<ASG_SnakeLink> ASG_Snake::GetSnakeLinkFromPool(const TSubclassOf<ASG_
 	return SnakeLink;
 }
 
-void ASG_Snake::AddSnakeLinkToPool(TObjectPtr<ASG_SnakeLink>& SnakeLink)
+void ASG_Snake::AddSnakeLinkToPool(TObjectPtr<ASG_SnakeLink> SnakeLink)
 {
 	SnakeLinksPool.Push(SnakeLink);
-
-	SnakeLink->SetActorHiddenInGame(false); // @todo: make true
-	SnakeLink->SetActorLocation(FVector(0.0, SnakeLinksPool.Num() * 150.0, 0.0));
-	SnakeLink->SetColor(FLinearColor::Yellow);
+	SnakeLink->SetActorHiddenInGame(true); 
 }
