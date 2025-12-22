@@ -3,7 +3,6 @@
 #include "SG_WorldUtils.h"
 #include "LoggingConfig.h"
 
-#pragma optimize("", off)
 
 DEFINE_LOG_CATEGORY_STATIC(LogSGSnake, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
