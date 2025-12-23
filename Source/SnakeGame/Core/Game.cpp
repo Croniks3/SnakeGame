@@ -68,6 +68,7 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 	}
 	
 	m_snake->move(input);
+	updateGrid();
 	
 	if(isDied() == true)
 	{
@@ -79,8 +80,6 @@ void Game::update(float deltaSeconds, const SnakeInput& input)
 		m_gameOver = true;
 		return;
 	}
-	
-	updateGrid();
 }
 
 void Game::updateGrid()
