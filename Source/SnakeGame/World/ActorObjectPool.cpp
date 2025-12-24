@@ -30,7 +30,7 @@ void UActorObjectPool::Initialize(UWorld* World)
 
     ActorPool.Reserve(PoolCapacity);
 
-    for(uint32 i = 0; i < PoolCapacity; ++i)
+    for(int32 i = 0; i < PoolCapacity; ++i)
     {
         AActor* Actor = World->SpawnActor<AActor>(ActorClass, FTransform::Identity);
         if(!Actor) continue;

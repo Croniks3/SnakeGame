@@ -7,6 +7,7 @@
 #include "SG_Snake.generated.h"
 
 class ASG_SnakeLink;
+class UActorObjectPool;
 
 UCLASS()
 class SNAKEGAME_API ASG_Snake : public AActor
@@ -27,6 +28,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TSubclassOf<ASG_SnakeLink> SnakeLinkClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TSubclassOf<UActorObjectPool> SnakeLinkPoolClass;
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 
@@ -37,18 +41,8 @@ private:
 	FLinearColor SnakeLinkColor;
 
 	UPROPERTY()
-	TArray<TObjectPtr<ASG_SnakeLink>> SnakeLinks;
-
-private:
-	// SnakeLink object pool
-
-	UPROPERTY(EditDefaultsOnly)
-	uint32 LinksPoolCapacity{10};
+	TObjectPtr<UActorObjectPool> SnakeLinkPool;
 
 	UPROPERTY()
-	TArray<TObjectPtr<ASG_SnakeLink>> SnakeLinksPool;
-
-	void ReserveLinksInPool(const TSubclassOf<ASG_SnakeLink>& InSnakeLinkClass, int32 Number);
-	TObjectPtr<ASG_SnakeLink> GetSnakeLinkFromPool(const TSubclassOf<ASG_SnakeLink>& SnakeLinkClass, const FTransform& Transform);
-	void AddSnakeLinkToPool(TObjectPtr<ASG_SnakeLink> SnakeLink);
+	TArray<TObjectPtr<ASG_SnakeLink>> SnakeLinks;
 };
