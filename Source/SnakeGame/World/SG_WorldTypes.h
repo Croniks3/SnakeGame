@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataTable.h"
+#include "Engine/DataAsset.h"
 #include "SG_WorldTypes.generated.h"
 
 
@@ -30,4 +31,20 @@ struct FSnakeColors : public FTableRowBase
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	FLinearColor FoodColor{};
+};
+
+UCLASS(BlueprintType)
+class UActorObjectPoolConfig : public UDataAsset
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AActor> ActorClass;
+
+	UPROPERTY(EditDefaultsOnly)
+	int32 PoolCapacity = 8;
+
+	UPROPERTY(EditDefaultsOnly)
+	bool bFillFromStart = true;
 };

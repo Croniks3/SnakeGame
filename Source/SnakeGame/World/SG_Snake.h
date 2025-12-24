@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Core/Snake.h"
 #include "Core/SG_Types.h"
+#include "World/SG_WorldTypes.h"
 #include "SG_Snake.generated.h"
 
 class ASG_SnakeLink;
@@ -23,13 +24,7 @@ public:
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<ASG_SnakeLink> SnakeHeadClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<ASG_SnakeLink> SnakeLinkClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TSubclassOf<UActorObjectPool> SnakeLinkPoolClass;
+	TObjectPtr<UActorObjectPoolConfig> SnakeLinkPoolConfig;
 
 public:	
 	virtual void Tick(float DeltaTime) override;

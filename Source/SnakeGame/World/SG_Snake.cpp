@@ -26,7 +26,7 @@ void ASG_Snake::SetModel(const TSharedPtr<SnakeGame::Snake>& InSnake, uint32 InC
 	if(!SnakeLinkPool)
 	{
 		SnakeLinkPool = NewObject<UActorObjectPool>(this);
-		SnakeLinkPool->Initialize(GetWorld());
+		SnakeLinkPool->Initialize(GetWorld(), SnakeLinkPoolConfig);
 	}
 
 	for(auto SnakeLink : SnakeLinks)

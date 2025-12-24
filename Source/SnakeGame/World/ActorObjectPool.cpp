@@ -1,10 +1,11 @@
 #include "World/ActorObjectPool.h"
+#include "World/SG_WorldTypes.h"
 #include "LoggingConfig.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogActorPool, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 
-void UActorObjectPool::Initialize(UWorld* World)
+void UActorObjectPool::Initialize(UWorld* World, const UActorObjectPoolConfig* Config)
 {
     check(World);
     if(!World) 
@@ -16,21 +17,23 @@ void UActorObjectPool::Initialize(UWorld* World)
     
     CachedWorld = World;
 
-    if(!ActorClass)
+    if(!Config || !Config->ActorClass)
     {
-        UE_LOG(LogActorPool, Error, TEXT("(%s::%s): The field ActorClass is empty!"), 
+        UE_LOG(LogActorPool, Error, TEXT("(%s::%s): Invalid configuration!"), 
             *GetNameSafe(this), TEXT(__FUNCTION__));
         return;
     }
 
-    if(!bFillFromStart) 
+    ActorClass = Config->ActorClass;
+
+    if(!Config->bFillFromStart)
     { 
         return; 
     }
 
-    ActorPool.Reserve(PoolCapacity);
+    ActorPool.Reserve(Config->PoolCapacity);
 
-    for(int32 i = 0; i < PoolCapacity; ++i)
+    for(int32 i = 0; i < Config->PoolCapacity; ++i)
     {
         AActor* Actor = World->SpawnActor<AActor>(ActorClass, FTransform::Identity);
         if(!Actor) continue;
