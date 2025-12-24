@@ -71,34 +71,37 @@ bool Grid::hitTest(const Position& snakeHeadPos, CellType hitWith) const
 
 bool SnakeGame::Grid::getRandomEmptyPosition(const Position& snakeHeadPos, Position& outRandomPos) const
 {
-	const auto gridSize = c_dimensions.height * c_dimensions.width;
-	const auto randIndex = FMath::RandRange(0, gridSize - 1);
-
-	for(uint32 i = randIndex; i < gridSize; ++i)
+	const uint32 widthWithoutWalls = c_dimensions.width - 2;
+	const uint32 heightWithoutWalls = c_dimensions.height - 2;
+	const uint32 startX = FMath::RandRange(1, widthWithoutWalls);
+	const uint32 startY = FMath::RandRange(1, heightWithoutWalls);
+	
+	uint32 x = startX, y = startY;
+	do
 	{
-		if(m_cells[i] == CellType::EmptyCell)
+		uint32 index = posToIndex(x, y);
+		if(m_cells[index] == CellType::EmptyCell)
 		{
-			Position randomPosition = indexToPos(i);
-			if(randomPosition != snakeHeadPos)
-			{
-				outRandomPos = randomPosition;
-				return true;
-			}	
-		}
-	}
-
-	for(int32 i = 0; i < randIndex; ++i)
-	{
-		if(m_cells[i] == CellType::EmptyCell)
-		{
-			Position randomPosition = indexToPos(i);
+			Position randomPosition = indexToPos(index);
 			if(randomPosition != snakeHeadPos)
 			{
 				outRandomPos = randomPosition;
 				return true;
 			}
 		}
+
+		++x;
+		if(x > widthWithoutWalls)
+		{
+			x = 1;
+			++y;
+			if(y > heightWithoutWalls)
+			{
+				y = 1;
+			}
+		}
 	}
+	while(x != startX || y != startY);
 	
 	return false;
 }
