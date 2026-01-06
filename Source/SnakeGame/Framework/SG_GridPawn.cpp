@@ -1,5 +1,8 @@
 #include "Framework/SG_GridPawn.h"
 #include "Camera/CameraComponent.h"
+#include "LoggingConfig.h"
+
+DEFINE_LOG_CATEGORY_STATIC(LogGridPawn, LOG_DEFAULT_VERBOSITY, LOG_COMPILETIME_VERBOSITY);
 
 namespace
 {
@@ -49,6 +52,9 @@ void ASG_GridPawn::UpdateLocation(const SnakeGame::Dimensions& gridDimensions, u
 
 void ASG_GridPawn::OnViewportResized(FViewport* viewPort, uint32 i)
 {
+	UE_LOG(LogGridPawn, Error, TEXT("viewPort is nullptr: %d, viewPort->GetSizeXY().Y == 0: %d, GridDimensions.height == 0: %d")
+		,viewPort == nullptr ,viewPort->GetSizeXY().Y == 0 ,GridDimensions.height == 0);
+
 	if (viewPort == nullptr || viewPort->GetSizeXY().Y == 0 || GridDimensions.height == 0)
 	{
 		return;

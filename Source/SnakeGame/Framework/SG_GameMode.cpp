@@ -101,6 +101,9 @@ void ASG_GameMode::StartPlay()
 
 void ASG_GameMode::Tick(float deltaSeconds)
 {
+	/*UE_LOG(LogSGGameMode, Error, TEXT("(%s:%s)")
+		,*GetNameSafe(this), ANSI_TO_TCHAR(__FUNCTION__));*/
+
 	Super::Tick(deltaSeconds);
 
 	if(Game.IsValid() == true && Game->isGameOver() == false)

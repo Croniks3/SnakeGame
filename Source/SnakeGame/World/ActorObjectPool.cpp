@@ -19,8 +19,8 @@ void UActorObjectPool::Initialize(UWorld* World, const UActorObjectPoolConfig* C
 
     if(!Config || !Config->ActorClass)
     {
-        UE_LOG(LogActorPool, Error, TEXT("(%s::%s): Invalid configuration!"), 
-            *GetNameSafe(this), ANSI_TO_TCHAR(__FUNCTION__));
+        UE_LOG(LogActorPool, Error, TEXT("(%s::%s): Invalid configuration!") 
+            ,*GetNameSafe(this), ANSI_TO_TCHAR(__FUNCTION__));
         return;
     }
 
