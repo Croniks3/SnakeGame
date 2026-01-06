@@ -14,7 +14,7 @@ class SNAKEGAME_API ASG_GridPawn : public APawn
 
 public:
 	ASG_GridPawn();
-	void UpdateLocation(const SnakeGame::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin);
+	void SetGridSettings(const SnakeGame::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin);
 	
 protected:
 	UPROPERTY(VisibleAnywhere)
@@ -23,9 +23,18 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* Camera;
 
+	virtual void BeginPlay() override;
+
 private:
 	SnakeGame::Dimensions GridDimensions;
 	uint32 CellSize;
 	FTransform GridOrigin;
-	void OnViewportResized(FViewport* viewPort, uint32 i);
+
+	bool bGridParamsReady = false;
+	bool bCameraApplied = false;
+	uint32 ApplyCameraAttempts = 0;
+	uint32 MaxApplyAttempts = 10;
+	FTimerHandle ApplyCameraTimer;
+
+	void UpdateLocation();
 };

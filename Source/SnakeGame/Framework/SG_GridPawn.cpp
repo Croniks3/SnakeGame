@@ -32,30 +32,51 @@ ASG_GridPawn::ASG_GridPawn()
 	Camera->SetupAttachment(Origin);
 }
 
-void ASG_GridPawn::UpdateLocation(const SnakeGame::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin)
+void ASG_GridPawn::BeginPlay()
+{
+	Super::BeginPlay();
+
+	GetWorldTimerManager().SetTimer(
+		ApplyCameraTimer,
+		this,
+		&ThisClass::UpdateLocation,
+		0.05f,   
+		true
+	);
+}
+
+void ASG_GridPawn::SetGridSettings(const SnakeGame::Dimensions& gridDimensions, uint32 cellSize, const FTransform& gridOrigin)
 {
 	GridDimensions = gridDimensions;
 	CellSize = cellSize;
 	GridOrigin = gridOrigin;
 
-	check(GEngine);
-	check(GEngine->GameViewport);
-	check(GEngine->GameViewport->Viewport);
-
-	auto* viewPort = GEngine->GameViewport->Viewport;
-	viewPort->ViewportResizedEvent.AddUObject(this, &ThisClass::OnViewportResized);
-
-#if WITH_EDITOR
-	OnViewportResized(viewPort, 0);
-#endif
+	bGridParamsReady = true;
 }
 
-void ASG_GridPawn::OnViewportResized(FViewport* viewPort, uint32 i)
+void ASG_GridPawn::UpdateLocation()
 {
-	UE_LOG(LogGridPawn, Error, TEXT("viewPort is nullptr: %d, viewPort->GetSizeXY().Y == 0: %d, GridDimensions.height == 0: %d")
-		,viewPort == nullptr ,viewPort->GetSizeXY().Y == 0 ,GridDimensions.height == 0);
+	++ApplyCameraAttempts;
 
-	if (viewPort == nullptr || viewPort->GetSizeXY().Y == 0 || GridDimensions.height == 0)
+	if(bCameraApplied || ApplyCameraAttempts >= MaxApplyAttempts)
+	{
+		GetWorldTimerManager().ClearTimer(ApplyCameraTimer);
+		return;
+	}
+
+	if(!bGridParamsReady)
+	{
+		return;
+	}
+
+	auto GameViewport = GEngine->GameViewport;
+	if(!GameViewport)
+	{
+		return;
+	}
+
+	auto* ViewPort = GameViewport->Viewport;
+	if (ViewPort == nullptr || ViewPort->GetSizeXY().Y == 0 || GridDimensions.height == 0)
 	{
 		return;
 	}
@@ -65,7 +86,7 @@ void ASG_GridPawn::OnViewportResized(FViewport* viewPort, uint32 i)
 
 	double z = 0.0;
 
-	const double viewportAspect = static_cast<double>(viewPort->GetSizeXY().X) / viewPort->GetSizeXY().Y;
+	const double viewportAspect = static_cast<double>(ViewPort->GetSizeXY().X) / ViewPort->GetSizeXY().Y;
 	const double gridAspect = static_cast<double>(GridDimensions.width) / GridDimensions.height;
 
 	if (viewportAspect <= gridAspect)
@@ -83,4 +104,6 @@ void ASG_GridPawn::OnViewportResized(FViewport* viewPort, uint32 i)
 	
 	const FVector newPawnLocation = GridOrigin.GetLocation() + 0.5 * FVector(worldHeight, worldWidth, z);
 	SetActorLocation(newPawnLocation);
+
+	bCameraApplied = true;
 }

@@ -63,7 +63,7 @@ void ASG_GameMode::StartPlay()
 	check(gridPawn);
 	check(Game->getGrid());
 
-	gridPawn->UpdateLocation(Game->getGrid()->dimensions(), CellSize, gridOrigin);
+	gridPawn->SetGridSettings(Game->getGrid()->dimensions(), CellSize, gridOrigin);
 
 	CreateBackgroundPlane();
 
