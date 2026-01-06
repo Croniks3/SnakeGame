@@ -11,7 +11,7 @@ void UActorObjectPool::Initialize(UWorld* World, const UActorObjectPoolConfig* C
     if(!World) 
     {
         UE_LOG(LogActorPool, Error, TEXT("(%s::%s): A null pointer to the World was passed!"), 
-            *GetNameSafe(this), TEXT(__FUNCTION__));
+            *GetNameSafe(this), ANSI_TO_TCHAR(__FUNCTION__));
         return;
     } 
     
@@ -20,7 +20,7 @@ void UActorObjectPool::Initialize(UWorld* World, const UActorObjectPoolConfig* C
     if(!Config || !Config->ActorClass)
     {
         UE_LOG(LogActorPool, Error, TEXT("(%s::%s): Invalid configuration!"), 
-            *GetNameSafe(this), TEXT(__FUNCTION__));
+            *GetNameSafe(this), ANSI_TO_TCHAR(__FUNCTION__));
         return;
     }
 
@@ -64,14 +64,14 @@ TObjectPtr<AActor> UActorObjectPool::GetActorFromPool()
         if(!CachedWorld.IsValid())
         {
             UE_LOG(LogActorPool, Error, TEXT("(%s::%s): The field CachedWorld is a null pointer!")
-                , *GetNameSafe(this), TEXT(__FUNCTION__));
+                , *GetNameSafe(this), ANSI_TO_TCHAR(__FUNCTION__));
             return nullptr;
         }
 
         if(!ActorClass)
         {
             UE_LOG(LogActorPool, Error, TEXT("(%s::%s): The field ActorClass is empty!")
-                , *GetNameSafe(this), TEXT(__FUNCTION__));
+                , *GetNameSafe(this), ANSI_TO_TCHAR(__FUNCTION__));
             return nullptr;
         }
 

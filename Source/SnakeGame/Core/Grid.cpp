@@ -14,7 +14,10 @@ Grid::Grid(const Dimensions& gridSize) //
 	m_cells.Init(CellType::EmptyCell, c_dimensions.width * c_dimensions.height);
 
 	initWalls();
+
+#if !UE_BUILD_SHIPPING
 	printDebug();
+#endif
 }
 
 void Grid::initWalls()
